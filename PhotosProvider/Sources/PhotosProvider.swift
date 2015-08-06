@@ -7,7 +7,53 @@
 //
 
 import Foundation
+import Photos
+import AssetsLibrary
 
-struct PhotosProvider {
+public enum PhotosProviderAuthorizationStatus : Int {
     
+    case NotDetermined // User has not yet made a choice with regards to this application
+    case Restricted // This application is not authorized to access photo data.
+    // The user cannot change this application’s status, possibly due to active restrictions
+    //   such as parental controls being in place.
+    case Denied // User has explicitly denied this application access to photos data.
+    case Authorized // User has authorized this application to access photos data.
+}
+
+
+
+public struct PhotosProvider {
+    
+    public static var authorizationStatus: PhotosProviderAuthorizationStatus {
+        
+        if #available(iOS 8.0, *) {
+            
+            return PhotosProviderAuthorizationStatus(rawValue: PHPhotoLibrary.authorizationStatus().rawValue)!
+        } else {
+            
+            return PhotosProviderAuthorizationStatus(rawValue: ALAssetsLibrary.authorizationStatus().rawValue)!
+        }
+    }
+    
+    public static func requestAuthorization(handler: ((PhotosProviderAuthorizationStatus) -> Void)?) {
+        
+        if #available(iOS 8.0, *) {
+            
+            PHPhotoLibrary.requestAuthorization({ (status) -> Void in
+                let status = PhotosProviderAuthorizationStatus(rawValue: status.rawValue)!
+                handler?(status)
+            })
+        } else {
+            
+            // TODO:
+        }
+    }
+    
+    public static func startPreheating() {
+        
+    }
+    
+    public static func endPreheating() {
+        
+    }
 }

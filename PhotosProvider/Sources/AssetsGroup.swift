@@ -13,8 +13,10 @@ import CoreLocation
 
 public protocol AssetsGroup {
     
-    func requestDividedAssets(result: ((dividedAssets: [ByDayAssetsGroup]) -> Void)?)
+    func requestByDayAssetsGroups(result: ((ByDayAssetsGroups: [ByDayAssetsGroup]) -> Void)?)
     func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?)
+    
+    subscript (index: Int) -> Asset? { get }
 }
 
 public class PhotosPickerAssetsGroup: AssetsGroup {
@@ -26,7 +28,7 @@ public class PhotosPickerAssetsGroup: AssetsGroup {
         self.assets = assets
     }
     
-    public func requestDividedAssets(result: ((dividedAssets: [ByDayAssetsGroup]) -> Void)?) {
+    public func requestByDayAssetsGroups(result: ((ByDayAssetsGroups: [ByDayAssetsGroup]) -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -34,7 +36,7 @@ public class PhotosPickerAssetsGroup: AssetsGroup {
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                result?(dividedAssets: dividedAssets)
+                result?(ByDayAssetsGroups: dividedAssets)
             })
         })
     }
@@ -47,12 +49,17 @@ public class PhotosPickerAssetsGroup: AssetsGroup {
             block?(asset: asset)
         }
     }
+    
+    public subscript (index: Int) -> Asset? {
+        
+        return self.assets[index]
+    }
 }
 
 @available(iOS 8.0, *)
 extension PHFetchResult: AssetsGroup {
     
-    public func requestDividedAssets(result: ((dividedAssets: [ByDayAssetsGroup]) -> Void)?) {
+    public func requestByDayAssetsGroups(result: ((ByDayAssetsGroups: [ByDayAssetsGroup]) -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -60,7 +67,7 @@ extension PHFetchResult: AssetsGroup {
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                result?(dividedAssets: dividedAssets)
+                result?(ByDayAssetsGroups: dividedAssets)
             })
         })
     }
@@ -75,11 +82,16 @@ extension PHFetchResult: AssetsGroup {
             }
         }
     }
+    
+    public subscript (index: Int) -> Asset? {
+        
+        return self.objectAtIndex(index) as? PHAsset
+    }
 }
 
 extension ALAssetsGroup: AssetsGroup {
     
-    public func requestDividedAssets(result: ((dividedAssets: [ByDayAssetsGroup]) -> Void)?) {
+    public func requestByDayAssetsGroups(result: ((ByDayAssetsGroups: [ByDayAssetsGroup]) -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -87,17 +99,54 @@ extension ALAssetsGroup: AssetsGroup {
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                result?(dividedAssets: dividedAssets)
+                result?(ByDayAssetsGroups: dividedAssets)
             })
         })
     }
     
     public func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?) {
-        
+
         self.enumerateAssetsUsingBlock { (asset, index, stop) -> Void in
             
             block?(asset: asset)
         }
+    }
+    
+    public subscript (index: Int) -> Asset? {
+        
+        return self.assets?[index]
+    }
+    
+    var assets: [ALAsset]? {
+        
+        get {
+            
+            if let value = objc_getAssociatedObject(self, &StoredProperties.assets)  as? [ALAsset] {
+                return value
+            }
+            
+            var assets: [ALAsset] = []
+            
+            self.enumerateAssetsUsingBlock { (asset, index, stop) -> Void in
+                
+                assets.append(asset)
+            }
+            self.assets = assets
+            return assets
+        }
+        set {
+            
+            objc_setAssociatedObject(
+                self,
+                &StoredProperties.assets,
+                newValue,
+                .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
+    
+    private struct StoredProperties {
+        
+        static var assets: Void?
     }
 }
 
