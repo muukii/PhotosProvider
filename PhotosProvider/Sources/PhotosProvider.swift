@@ -20,7 +20,12 @@ public enum PhotosProviderAuthorizationStatus : Int {
     case Authorized // User has authorized this application to access photos data.
 }
 
-
+func PPLog<T>(value: T) {
+    #if DEBUG
+        print(value, appendNewline: true)
+    #else
+    #endif
+}
 
 public struct PhotosProvider {
     
@@ -56,4 +61,78 @@ public struct PhotosProvider {
     public static func endPreheating() {
         
     }
+    
+    @available(iOS 8.0, *)
+    public static func fetchAllPhotos(options: PHFetchOptions? = nil) -> Collection {
+        let defaultOptions: PHFetchOptions = {
+            let options = PHFetchOptions()
+            options.sortDescriptors = [
+                NSSortDescriptor(key: "creationDate", ascending: false),
+            ]
+            return options
+        }()
+        let fetchResult = PHAsset.fetchAssetsWithOptions(options ?? defaultOptions)
+        
+        let collection = Collection(title: "カメラロール", group: fetchResult)
+        return collection
+    }
+    
+    @available(iOS 8.0, *)
+    public static func fetchAllAlbums() -> [Collection] {
+        
+        let collections = self.fetchAssetCollection()
+        let defaultOptions: PHFetchOptions = {
+            let options = PHFetchOptions()
+            options.sortDescriptors = [
+                NSSortDescriptor(key: "creationDate", ascending: false),
+            ]
+            return options
+            }()
+        return collections.map {
+            
+            let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: defaultOptions)
+            let title = $0.localizedTitle ?? ""
+            return Collection(title: title, group: _assets)
+        }        
+    }
+    
+    @available(iOS 8.0, *)
+    public static func fetchTopLevelUserCollections() -> [PHAssetCollection] {
+        
+        let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+        
+        var collections: [PHAssetCollection] = []
+        topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            
+            if let collection = collection as? PHAssetCollection {
+                collections.insert(collection, atIndex: 0)
+            }
+        }
+        return collections
+    }
+    
+    @available(iOS 8.0, *)
+    public static func fetchSmartAlbumsCollections() -> [PHAssetCollection] {
+        
+        let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
+        var collections: [PHAssetCollection] = []
+        
+        smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            
+            if let collection = collection as? PHAssetCollection {
+                collections.insert(collection, atIndex: 0)
+            }
+        }
+        return collections
+    }
+            
+    @available(iOS 8.0, *)
+    public static func fetchAssetCollection() -> [PHAssetCollection] {
+        
+        let collections: [PHAssetCollection] = self.fetchTopLevelUserCollections() + self.fetchSmartAlbumsCollections()
+        
+        return collections
+    }
+    
+    
 }

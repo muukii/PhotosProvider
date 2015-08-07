@@ -17,8 +17,13 @@
 		4BD208541B736B430006925F /* PhotosProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD208531B736B430006925F /* PhotosProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BD2085B1B736B430006925F /* PhotosProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD208501B736B430006925F /* PhotosProvider.framework */; };
 		4BD208601B736B430006925F /* PhotosProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD2085F1B736B430006925F /* PhotosProviderTests.swift */; };
+		4BD816EE1B748E4E00DA5276 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD816ED1B748E4E00DA5276 /* AssetsViewController.swift */; };
+		4BD816F01B748F8800DA5276 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD816EF1B748F8800DA5276 /* CollectionCell.swift */; };
+		4BD816F21B748FA400DA5276 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD816F11B748FA400DA5276 /* AssetCell.swift */; };
+		4BD816F31B74A12800DA5276 /* PhotosProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD208501B736B430006925F /* PhotosProvider.framework */; };
+		4BD816F41B74A12800DA5276 /* PhotosProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD208501B736B430006925F /* PhotosProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4BF62D4B1B73BFFC0086E10C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF62D4A1B73BFFC0086E10C /* AppDelegate.swift */; };
-		4BF62D4D1B73BFFC0086E10C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF62D4C1B73BFFC0086E10C /* ViewController.swift */; };
+		4BF62D4D1B73BFFC0086E10C /* CollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF62D4C1B73BFFC0086E10C /* CollectionsViewController.swift */; };
 		4BF62D501B73BFFC0086E10C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BF62D4E1B73BFFC0086E10C /* Main.storyboard */; };
 		4BF62D521B73BFFC0086E10C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BF62D511B73BFFC0086E10C /* Assets.xcassets */; };
 		4BF62D551B73BFFC0086E10C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BF62D531B73BFFC0086E10C /* LaunchScreen.storyboard */; };
@@ -33,7 +38,28 @@
 			remoteGlobalIDString = 4BD2084F1B736B430006925F;
 			remoteInfo = PhotosProvider;
 		};
+		4BD816F51B74A12800DA5276 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BD208471B736B430006925F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BD2084F1B736B430006925F;
+			remoteInfo = PhotosProvider;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4BD816F71B74A12800DA5276 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4BD816F41B74A12800DA5276 /* PhotosProvider.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4B364FE21B73C81800ED6209 /* PHAssetCollection+Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PHAssetCollection+Util.swift"; sourceTree = "<group>"; };
@@ -50,9 +76,12 @@
 		4BD2085F1B736B430006925F /* PhotosProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosProviderTests.swift; sourceTree = "<group>"; };
 		4BD208611B736B430006925F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4BD208741B7377470006925F /* PhotosPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPicker.swift; sourceTree = "<group>"; };
+		4BD816ED1B748E4E00DA5276 /* AssetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetsViewController.swift; sourceTree = "<group>"; };
+		4BD816EF1B748F8800DA5276 /* CollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
+		4BD816F11B748FA400DA5276 /* AssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		4BF62D481B73BFFC0086E10C /* PhotosProviderDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosProviderDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BF62D4A1B73BFFC0086E10C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4BF62D4C1B73BFFC0086E10C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		4BF62D4C1B73BFFC0086E10C /* CollectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsViewController.swift; sourceTree = "<group>"; };
 		4BF62D4F1B73BFFC0086E10C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4BF62D511B73BFFC0086E10C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4BF62D541B73BFFC0086E10C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -80,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BD816F31B74A12800DA5276 /* PhotosProvider.framework in Frameworks */,
 				4B364FE71B73CAE600ED6209 /* Photos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,7 +176,10 @@
 			isa = PBXGroup;
 			children = (
 				4BF62D4A1B73BFFC0086E10C /* AppDelegate.swift */,
-				4BF62D4C1B73BFFC0086E10C /* ViewController.swift */,
+				4BF62D4C1B73BFFC0086E10C /* CollectionsViewController.swift */,
+				4BD816EF1B748F8800DA5276 /* CollectionCell.swift */,
+				4BD816ED1B748E4E00DA5276 /* AssetsViewController.swift */,
+				4BD816F11B748FA400DA5276 /* AssetCell.swift */,
 				4BF62D4E1B73BFFC0086E10C /* Main.storyboard */,
 				4BF62D511B73BFFC0086E10C /* Assets.xcassets */,
 				4BF62D531B73BFFC0086E10C /* LaunchScreen.storyboard */,
@@ -212,10 +245,12 @@
 				4BF62D441B73BFFC0086E10C /* Sources */,
 				4BF62D451B73BFFC0086E10C /* Frameworks */,
 				4BF62D461B73BFFC0086E10C /* Resources */,
+				4BD816F71B74A12800DA5276 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4BD816F61B74A12800DA5276 /* PBXTargetDependency */,
 			);
 			name = PhotosProviderDemo;
 			productName = PhotosProviderDemo;
@@ -317,8 +352,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BF62D4D1B73BFFC0086E10C /* ViewController.swift in Sources */,
+				4BF62D4D1B73BFFC0086E10C /* CollectionsViewController.swift in Sources */,
 				4BF62D4B1B73BFFC0086E10C /* AppDelegate.swift in Sources */,
+				4BD816F21B748FA400DA5276 /* AssetCell.swift in Sources */,
+				4BD816EE1B748E4E00DA5276 /* AssetsViewController.swift in Sources */,
+				4BD816F01B748F8800DA5276 /* CollectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +367,11 @@
 			isa = PBXTargetDependency;
 			target = 4BD2084F1B736B430006925F /* PhotosProvider */;
 			targetProxy = 4BD2085C1B736B430006925F /* PBXContainerItemProxy */;
+		};
+		4BD816F61B74A12800DA5276 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4BD2084F1B736B430006925F /* PhotosProvider */;
+			targetProxy = 4BD816F51B74A12800DA5276 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -502,8 +545,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = PhotosProviderDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = me.muukii.PhotosProviderDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -514,8 +558,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = PhotosProviderDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = me.muukii.PhotosProviderDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

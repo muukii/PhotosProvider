@@ -19,7 +19,7 @@ public protocol AssetsGroup {
     subscript (index: Int) -> Asset? { get }
 }
 
-public class PhotosPickerAssetsGroup: AssetsGroup {
+public class CustomAssetsGroup: AssetsGroup {
     
     public private(set) var assets : [Asset] = []
     
