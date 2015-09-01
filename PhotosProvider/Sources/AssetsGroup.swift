@@ -13,7 +13,7 @@ import CoreLocation
 
 public protocol AssetsGroup {
     
-    func requestByDayAssetsGroups(result: ((ByDayAssetsGroups: [ByDayAssetsGroup]) -> Void)?)
+    func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?)
     func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?)
     
     subscript (index: Int) -> Asset? { get }
@@ -28,7 +28,7 @@ public class CustomAssetsGroup: AssetsGroup {
         self.assets = assets
     }
     
-    public func requestByDayAssetsGroups(result: ((ByDayAssetsGroups: [ByDayAssetsGroup]) -> Void)?) {
+    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -36,7 +36,7 @@ public class CustomAssetsGroup: AssetsGroup {
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                result?(ByDayAssetsGroups: dividedAssets)
+                result?(assetsGroupByDay: dividedAssets)
             })
         })
     }
@@ -59,7 +59,7 @@ public class CustomAssetsGroup: AssetsGroup {
 @available(iOS 8.0, *)
 extension PHFetchResult: AssetsGroup {
     
-    public func requestByDayAssetsGroups(result: ((ByDayAssetsGroups: [ByDayAssetsGroup]) -> Void)?) {
+    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -67,7 +67,7 @@ extension PHFetchResult: AssetsGroup {
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                result?(ByDayAssetsGroups: dividedAssets)
+                result?(assetsGroupByDay: dividedAssets)
             })
         })
     }
@@ -91,7 +91,7 @@ extension PHFetchResult: AssetsGroup {
 
 extension ALAssetsGroup: AssetsGroup {
     
-    public func requestByDayAssetsGroups(result: ((ByDayAssetsGroups: [ByDayAssetsGroup]) -> Void)?) {
+    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -99,7 +99,7 @@ extension ALAssetsGroup: AssetsGroup {
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                result?(ByDayAssetsGroups: dividedAssets)
+                result?(assetsGroupByDay: dividedAssets)
             })
         })
     }
@@ -150,11 +150,11 @@ extension ALAssetsGroup: AssetsGroup {
     }
 }
 
-private func divideByDay(dateSortedAssets dateSortedAssets: AssetsGroup) -> [ByDayAssetsGroup] {
+private func divideByDay(dateSortedAssets dateSortedAssets: AssetsGroup) -> AssetsGroupByDay {
     
-    var dayAssets = [ByDayAssetsGroup]()
+    var dayAssets = AssetsGroupByDay()
     
-    var tmpDayAsset: ByDayAssetsGroup!
+    var tmpDayAsset: AssetsGroupByDay.DayAssets!
     var processingDate: NSDate!
     
     dateSortedAssets.enumerateAssetsUsingBlock { (asset) -> Void in
@@ -162,13 +162,13 @@ private func divideByDay(dateSortedAssets dateSortedAssets: AssetsGroup) -> [ByD
         processingDate = dateWithOutTime(asset.creationDate)
         if tmpDayAsset != nil && processingDate.isEqualToDate(tmpDayAsset!.day) == false {
             
-            dayAssets.append(tmpDayAsset!)
+            dayAssets.dayAssets.append(tmpDayAsset!)
             tmpDayAsset = nil
         }
         
         if tmpDayAsset == nil {
             
-            tmpDayAsset = ByDayAssetsGroup(day: processingDate)
+            tmpDayAsset = AssetsGroupByDay.DayAssets(day: processingDate)
         }
         
         tmpDayAsset.assets.append(asset)
