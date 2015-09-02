@@ -16,6 +16,8 @@ public protocol AssetsGroup {
     func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?)
     func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?)
     
+    var count: Int { get }
+    
     subscript (index: Int) -> Asset? { get }
 }
 
@@ -48,6 +50,11 @@ public class CustomAssetsGroup: AssetsGroup {
             
             block?(asset: asset)
         }
+    }
+    
+    public var count: Int {
+        
+        return self.assets.count
     }
     
     public subscript (index: Int) -> Asset? {
@@ -86,7 +93,7 @@ extension PHFetchResult: AssetsGroup {
             }
         }
     }
-    
+        
     public subscript (index: Int) -> Asset? {
         
         assert(self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
@@ -116,6 +123,11 @@ extension ALAssetsGroup: AssetsGroup {
             
             block?(asset: asset)
         }
+    }
+    
+    public var count: Int {
+        
+        return self.count
     }
     
     public subscript (index: Int) -> Asset? {
