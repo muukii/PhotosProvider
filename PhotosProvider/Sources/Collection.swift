@@ -12,15 +12,17 @@ public struct Collection {
     
     public private(set) var title: String
     public private(set) var group: AssetsGroup
-    public private(set) var byDayGroups: AssetsGroupByDay?
+    public private(set) var groupByDay: AssetsGroupByDay?
     
-    public init(title: String, group: AssetsGroup) {
+    public init(title: String, group: AssetsGroup, buildByDay: Bool = false) {
         
         self.title = title
         self.group = group
-//        
-//        self.group.requestAssetsGroupByDays { byDayGroups in
-//            self.byDayGroups = byDayGroups
-//        }
+
+        if buildByDay {
+            self.group.requestAssetsGroupByDays { groupByDay in
+                self.groupByDay = groupByDay
+            }
+        }
     }
 }

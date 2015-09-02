@@ -63,7 +63,7 @@ public struct PhotosProvider {
     }
     
     @available(iOS 8.0, *)
-    public static func fetchAllPhotos(options: PHFetchOptions? = nil) -> Collection {
+    public static func fetchAllPhotos(options: PHFetchOptions? = nil, collectionTitle: String) -> Collection {
         let defaultOptions: PHFetchOptions = {
             let options = PHFetchOptions()
             options.sortDescriptors = [
@@ -73,7 +73,7 @@ public struct PhotosProvider {
         }()
         let fetchResult = PHAsset.fetchAssetsWithOptions(options ?? defaultOptions)
         
-        let collection = Collection(title: "カメラロール", group: fetchResult)
+        let collection = Collection(title: collectionTitle, group: fetchResult)
         return collection
     }
     
