@@ -26,7 +26,17 @@ public protocol Asset {
     var hidden: Bool { get }
     var favorite: Bool { get }
     
-    func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?)
+    func requestImage(
+        targetSize targetSize: CGSize,
+        progress: NSProgress? -> Void,
+        option: AssetOption?,
+        completion: AssetResult -> Void)
+    
+    func requestOriginalImage(
+        progress progress: NSProgress? -> Void,
+        option: AssetOption?,
+        completion: AssetResult -> Void)
+    
 }
 
 public enum AssetMediaType: Int {
@@ -45,14 +55,66 @@ extension PHAsset: Asset {
         return AssetMediaType(rawValue: self.mediaType.rawValue)!
     }
     
-    public func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?) {
-        
-        PHImageManager.defaultManager().requestImageForAsset(self, targetSize: targetSize, contentMode: PHImageContentMode.AspectFill, options: nil) { (image, info) -> Void in
+    public func requestImage(
+        targetSize targetSize: CGSize,
+        progress: NSProgress? -> Void,
+        option: AssetOption?,
+        completion: AssetResult -> Void) {
             
-            result?(image: image)
-            return
-        }
+            // TODO: option
+            
+            let options = PHImageRequestOptions()
+            options.deliveryMode = .FastFormat
+            options.networkAccessAllowed = true
+            options.version = .Current
+            options.progressHandler = { progress, error, stop, info in
+                
+                // TODO:
+            }
+            
+            PHImageManager.defaultManager().requestImageForAsset(
+                self,
+                targetSize: targetSize,
+                contentMode: PHImageContentMode.AspectFill,
+                options: options) { (image, info) -> Void in
+                    
+                    guard let image = image else {
+                        completion(.Failure(AssetResultErrorType.Unknown))
+                        return
+                    }
+                    
+                    completion(.Success(image))
+            }
     }
+    
+    public func requestOriginalImage(
+        progress progress: NSProgress? -> Void,
+        option: AssetOption?,
+        completion: AssetResult -> Void) {
+            
+            // TODO: option
+            
+            let options = PHImageRequestOptions()
+            options.deliveryMode = .HighQualityFormat
+            options.networkAccessAllowed = true
+            options.version = .Current
+            options.progressHandler = { progress, error, stop, info in
+                
+                // TODO:
+            }
+            
+            PHImageManager.defaultManager().requestImageDataForAsset(self, options: options) { (imageData, UTI, orientation, info) -> Void in
+                
+                guard let imageData = imageData, let image = UIImage(data: imageData) else {
+                    
+                    completion(.Failure(AssetResultErrorType.Unknown))
+                    return
+                }
+                
+                completion(.Success(image))
+            }
+    }
+    
 }
 
 extension ALAsset: Asset {
@@ -106,8 +168,38 @@ extension ALAsset: Asset {
     
     public func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?) {
         
-        let cgimage = self.defaultRepresentation().fullScreenImage()
-        let image = UIImage(CGImage: cgimage.takeUnretainedValue())
-        result?(image: image)
+
+    }
+    
+    
+    public func requestImage(
+        targetSize targetSize: CGSize,
+        progress: NSProgress? -> Void,
+        option: AssetOption?,
+        completion: AssetResult -> Void) {
+            
+            let cgimage = self.defaultRepresentation().fullScreenImage()
+            
+            guard let _cgimage = cgimage else {
+                completion(.Failure(AssetResultErrorType.Unknown))
+                return
+            }
+            let image = UIImage(CGImage: _cgimage.takeUnretainedValue())
+            completion(.Success(image))
+    }
+    
+    public func requestOriginalImage(
+        progress progress: NSProgress? -> Void,
+        option: AssetOption?,
+        completion: AssetResult -> Void) {
+            
+            let cgimage = self.defaultRepresentation().fullScreenImage()
+            
+            guard let _cgimage = cgimage else {
+                completion(.Failure(AssetResultErrorType.Unknown))
+                return
+            }
+            let image = UIImage(CGImage: _cgimage.takeUnretainedValue())
+            completion(.Success(image))
     }
 }
