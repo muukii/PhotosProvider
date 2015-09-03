@@ -64,9 +64,10 @@ extension PHAsset: Asset {
             // TODO: option
             
             let options = PHImageRequestOptions()
-            options.deliveryMode = .FastFormat
+            options.deliveryMode = .HighQualityFormat
             options.networkAccessAllowed = true
             options.version = .Current
+            options.resizeMode = .Fast
             options.progressHandler = { progress, error, stop, info in
                 
                 // TODO:
