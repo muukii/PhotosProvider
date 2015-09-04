@@ -26,6 +26,8 @@ public protocol Asset {
     var hidden: Bool { get }
     var favorite: Bool { get }
     
+    var originalImageDownloadProgress: NSProgress? { get }
+    
     func requestImage(
         targetSize targetSize: CGSize,
         progress: NSProgress? -> Void,
@@ -36,6 +38,9 @@ public protocol Asset {
         progress progress: NSProgress? -> Void,
         option: AssetOption?,
         completion: AssetResult -> Void)
+    
+    func cancelRequestImage()
+    func cancelRequestOriginalImage()
     
 }
 
@@ -73,7 +78,7 @@ extension PHAsset: Asset {
                 // TODO:
             }
             
-            PHImageManager.defaultManager().requestImageForAsset(
+            self.imageRequestID = PHImageManager.defaultManager().requestImageForAsset(
                 self,
                 targetSize: targetSize,
                 contentMode: PHImageContentMode.AspectFill,
@@ -94,26 +99,123 @@ extension PHAsset: Asset {
         completion: AssetResult -> Void) {
             
             // TODO: option
+
+            self.originalImageDownloadProgress = nil
             
             let options = PHImageRequestOptions()
             options.deliveryMode = .HighQualityFormat
             options.networkAccessAllowed = true
             options.version = .Current
-            options.progressHandler = { progress, error, stop, info in
+            options.progressHandler = { _progress, error, stop, info in
                 
-                // TODO:
+                dispatch_async(dispatch_get_main_queue()) {
+                    if self.originalImageDownloadProgress == nil {
+                        self.originalImageDownloadProgress = NSProgress(totalUnitCount: 10000)
+                        progress(self.originalImageDownloadProgress)
+                    }
+                    
+                    self.originalImageDownloadProgress?.completedUnitCount = Int64(_progress * Double(10000))
+                    
+                }
             }
             
-            PHImageManager.defaultManager().requestImageDataForAsset(self, options: options) { (imageData, UTI, orientation, info) -> Void in
+           self.originalImageRequestID = PHImageManager.defaultManager().requestImageDataForAsset(self, options: options) { (imageData, UTI, orientation, info) -> Void in
                 
                 guard let imageData = imageData, let image = UIImage(data: imageData) else {
                     
-                    completion(.Failure(AssetResultErrorType.Unknown))
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(.Failure(AssetResultErrorType.Unknown))
+                    }
                     return
                 }
                 
-                completion(.Success(image))
+                dispatch_async(dispatch_get_main_queue()) {
+                    completion(.Success(image))
+                }
+                
             }
+    }
+    
+    public dynamic var originalImageDownloadProgress: NSProgress? {
+        
+        get {
+            
+            let value = objc_getAssociatedObject(self, &StoredProperties.originalImageDownloadProgress) as? NSProgress
+            return value
+        }
+        set {
+            
+            objc_setAssociatedObject(
+                self,
+                &StoredProperties.originalImageDownloadProgress,
+                newValue,
+                objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    public func cancelRequestImage() {
+        
+        guard let imageRequestID = self.imageRequestID else {
+            return
+        }
+        PHImageManager.defaultManager().cancelImageRequest(imageRequestID)
+    }
+    
+    public func cancelRequestOriginalImage() {
+        
+        guard let originalImageRequestID = self.originalImageRequestID else {
+            return
+        }
+        PHImageManager.defaultManager().cancelImageRequest(originalImageRequestID)
+    }
+    
+    private var imageRequestID: PHImageRequestID? {
+    
+        get {
+            
+            let value = (objc_getAssociatedObject(self, &StoredProperties.imageRequestID) as? NSNumber)?.intValue
+            return value
+        }
+        set {
+            
+            guard let newValue = newValue else {
+                return
+            }
+            objc_setAssociatedObject(
+                self,
+                &StoredProperties.imageRequestID,
+                NSNumber(int: newValue),
+                objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+        }
+    }
+    
+    private var originalImageRequestID: PHImageRequestID? {
+    
+        get {
+            
+            let value = (objc_getAssociatedObject(self, &StoredProperties.originalImageRequestID) as? NSNumber)?.intValue
+            return value
+        }
+        set {
+            
+            guard let newValue = newValue else {
+                return
+            }
+            objc_setAssociatedObject(
+                self,
+                &StoredProperties.originalImageRequestID,
+                NSNumber(int: newValue),
+                objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+        }
+    }
+    
+    private struct StoredProperties {
+        
+        static var originalImageDownloadProgress: Void?
+        static var imageRequestID: Void?
+        static var originalImageRequestID: Void?
     }
     
 }
@@ -202,5 +304,35 @@ extension ALAsset: Asset {
             }
             let image = UIImage(CGImage: _cgimage.takeUnretainedValue())
             completion(.Success(image))
+    }
+    
+    public dynamic var originalImageDownloadProgress: NSProgress? {
+        
+        get {
+            
+            let value = objc_getAssociatedObject(self, &StoredProperties.originalImageDownloadProgress) as? NSProgress
+            return value
+        }
+        set {
+            
+            objc_setAssociatedObject(
+                self,
+                &StoredProperties.originalImageDownloadProgress,
+                newValue,
+                objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    public func cancelRequestImage() {
+        
+    }
+    
+    public func cancelRequestOriginalImage() {
+        
+    }
+    
+    private struct StoredProperties {
+        
+        static var originalImageDownloadProgress: Void?
     }
 }
