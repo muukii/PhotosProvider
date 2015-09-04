@@ -100,7 +100,6 @@ extension PHAsset: Asset {
             
             // TODO: option
 
-            self.originalImageDownloadProgress = nil
             
             let options = PHImageRequestOptions()
             options.deliveryMode = .HighQualityFormat
@@ -115,7 +114,10 @@ extension PHAsset: Asset {
                     }
                     
                     self.originalImageDownloadProgress?.completedUnitCount = Int64(_progress * Double(10000))
-                    
+                                        
+                    if _progress == 1.0 {
+                        self.originalImageDownloadProgress = nil
+                    }
                 }
             }
             
@@ -167,6 +169,7 @@ extension PHAsset: Asset {
             return
         }
         PHImageManager.defaultManager().cancelImageRequest(originalImageRequestID)
+        self.originalImageDownloadProgress?.cancel()
     }
     
     private var imageRequestID: PHImageRequestID? {
