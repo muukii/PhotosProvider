@@ -102,12 +102,24 @@ public struct PhotosProvider {
         let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
         
         var collections: [PHAssetCollection] = []
-        topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+        
+        func recursive(result: PHFetchResult) {
             
-            if let collection = collection as? PHAssetCollection {
-                collections.insert(collection, atIndex: 0)
+            result.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+                
+                if let collection = collection as? PHAssetCollection {
+                    collections.insert(collection, atIndex: 0)
+                }
+                
+                if let collectionList = collection as? PHCollectionList {
+                    
+                    recursive(PHCollectionList.fetchCollectionsInCollectionList(collectionList, options: nil))
+                }
             }
         }
+        
+        recursive(topLevelUserCollectionsResult)
+        
         return collections
     }
     
