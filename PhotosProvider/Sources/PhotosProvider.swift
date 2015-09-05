@@ -78,7 +78,7 @@ public struct PhotosProvider {
     }
     
     @available(iOS 8.0, *)
-    public static func fetchAllAlbums() -> [Collection] {
+    public static func fetchAllCollections() -> [Collection] {
         
         let collections = self.fetchAssetCollection()
         let defaultOptions: PHFetchOptions = {

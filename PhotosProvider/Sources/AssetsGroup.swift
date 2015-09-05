@@ -19,6 +19,8 @@ public protocol AssetsGroup {
     var count: Int { get }
     
     subscript (index: Int) -> Asset? { get }
+    var first: Asset? { get }
+    var last: Asset? { get }
 }
 
 public class CustomAssetsGroup: AssetsGroup {
@@ -61,6 +63,16 @@ public class CustomAssetsGroup: AssetsGroup {
         
         return self.assets[index]
     }
+    
+    public var first: Asset? {
+        
+        return self.assets.first
+    }
+    
+    public var last: Asset? {
+        
+        return self.assets.last
+    }
 }
 
 @available(iOS 8.0, *)
@@ -99,6 +111,17 @@ extension PHFetchResult: AssetsGroup {
         assert(self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
         
         return self.objectAtIndex(index) as? PHAsset
+    }
+    
+    
+    public var first: Asset? {
+        
+        return self.firstObject as? Asset
+    }
+    
+    public var last: Asset? {
+        
+        return self.lastObject as? Asset
     }
 }
 
@@ -165,6 +188,16 @@ extension ALAssetsGroup: AssetsGroup {
     private struct StoredProperties {
         
         static var assets: Void?
+    }
+    
+    public var first: Asset? {
+        
+        return self.assets?.first
+    }
+    
+    public var last: Asset? {
+        
+        return self.assets?.last
     }
 }
 
