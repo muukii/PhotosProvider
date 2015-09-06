@@ -29,6 +29,8 @@ func PPLog<T>(value: T) {
 
 public struct PhotosProvider {
     
+    public static var configuration: PhotosProviderConfiguration.Type = PhotosProviderDefaultConfiguration.self
+    
     public static var authorizationStatus: PhotosProviderAuthorizationStatus {
         
         if #available(iOS 8.0, *) {
@@ -62,89 +64,52 @@ public struct PhotosProvider {
         
     }
     
-    @available(iOS 8.0, *)
-    public static func fetchAllPhotos(options: PHFetchOptions? = nil, collectionTitle: String) -> Collection {
-        let defaultOptions: PHFetchOptions = {
-            let options = PHFetchOptions()
+    public static func fetchAllPhotos(title title: String) -> Collection {
+        
+        if #available(iOS 8.0, *) {
+            // Use Photos.framework
+            
+            let options = self.configuration.fetchAllPhotosOptions()
             options.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: false),
             ]
-            return options
-        }()
-        let fetchResult = PHAsset.fetchAssetsWithOptions(options ?? defaultOptions)
-        
-        let collection = Collection(title: collectionTitle, group: fetchResult)
-        return collection
-    }
-    
-    @available(iOS 8.0, *)
-    public static func fetchAllCollections() -> [Collection] {
-        
-        let collections = self.fetchAssetCollection()
-        let defaultOptions: PHFetchOptions = {
-            let options = PHFetchOptions()
-            options.sortDescriptors = [
-                NSSortDescriptor(key: "creationDate", ascending: false),
-            ]
-            return options
-            }()
-        return collections.map {
+
+            let fetchResult = PHAsset.fetchAssetsWithOptions(options)
             
-            let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: defaultOptions)
-            let title = $0.localizedTitle ?? ""
-            return Collection(title: title, group: _assets)
-        }        
-    }
-    
-    @available(iOS 8.0, *)
-    public static func fetchTopLevelUserCollections() -> [PHAssetCollection] {
-        
-        let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
-        
-        var collections: [PHAssetCollection] = []
-        
-        func recursive(result: PHFetchResult) {
+            let collection = Collection(title: title, group: fetchResult)
+            return collection
+        } else {
+            // Use AssetsLibrary.framework
             
-            result.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
-                
-                if let collection = collection as? PHAssetCollection {
-                    collections.insert(collection, atIndex: 0)
-                }
-                
-                if let collectionList = collection as? PHCollectionList {
-                    
-                    recursive(PHCollectionList.fetchCollectionsInCollectionList(collectionList, options: nil))
-                }
-            }
+            fatalError("Sorry, Not yet supported...")
         }
-        
-        recursive(topLevelUserCollectionsResult)
-        
-        return collections
     }
     
-    @available(iOS 8.0, *)
-    public static func fetchSmartAlbumsCollections() -> [PHAssetCollection] {
+    public static func fetchAlbums() -> [Collection] {
         
-        let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
-        var collections: [PHAssetCollection] = []
-        
-        smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+        if #available(iOS 8.0, *) {
             
-            if let collection = collection as? PHAssetCollection {
-                collections.insert(collection, atIndex: 0)
+            let collections = self.configuration.fetchAlbums()
+            let defaultOptions: PHFetchOptions = {
+                let options = PHFetchOptions()
+                options.sortDescriptors = [
+                    NSSortDescriptor(key: "creationDate", ascending: false),
+                ]
+                return options
+                }()
+            return collections.map {
+                
+                let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: defaultOptions)
+                let title = $0.localizedTitle ?? ""
+                return Collection(title: title, group: _assets)
             }
-        }
-        return collections
-    }
+        } else {
             
-    @available(iOS 8.0, *)
-    public static func fetchAssetCollection() -> [PHAssetCollection] {
-        
-        let collections: [PHAssetCollection] = self.fetchTopLevelUserCollections() + self.fetchSmartAlbumsCollections()
-        
-        return collections
+            return []
+        }
     }
-    
+}
+
+private struct PhotosProviderDefaultConfiguration: PhotosProviderConfiguration {
     
 }

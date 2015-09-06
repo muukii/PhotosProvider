@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B07A5C01B9AD37600801835 /* PhotosProviderConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B07A5BF1B9AD37600801835 /* PhotosProviderConfiguration.swift */; settings = {ASSET_TAGS = (); }; };
 		4B364FE31B73C81800ED6209 /* PHAssetCollection+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B364FE21B73C81800ED6209 /* PHAssetCollection+Util.swift */; };
 		4B364FE51B73C96D00ED6209 /* Monitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B364FE41B73C96D00ED6209 /* Monitor.swift */; };
 		4B364FE71B73CAE600ED6209 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B364FE61B73CAE600ED6209 /* Photos.framework */; };
@@ -64,6 +65,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B07A5BF1B9AD37600801835 /* PhotosProviderConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosProviderConfiguration.swift; sourceTree = "<group>"; };
 		4B364FE21B73C81800ED6209 /* PHAssetCollection+Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PHAssetCollection+Util.swift"; sourceTree = "<group>"; };
 		4B364FE41B73C96D00ED6209 /* Monitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Monitor.swift; sourceTree = "<group>"; };
 		4B364FE61B73CAE600ED6209 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				4BA1C8381B73B17B00D0F529 /* PhotosProvider.swift */,
+				4B07A5BF1B9AD37600801835 /* PhotosProviderConfiguration.swift */,
 				4B364FE41B73C96D00ED6209 /* Monitor.swift */,
 				4BF62D5A1B73C4A30086E10C /* Collection.swift */,
 				4BA1C83A1B73B1B700D0F529 /* Asset.swift */,
@@ -336,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B07A5C01B9AD37600801835 /* PhotosProviderConfiguration.swift in Sources */,
 				4BA1C83F1B73B42300D0F529 /* AssetsGroup.swift in Sources */,
 				4BF62D5B1B73C4A30086E10C /* Collection.swift in Sources */,
 				4B643C381B97C4D700991307 /* AssetOption.swift in Sources */,

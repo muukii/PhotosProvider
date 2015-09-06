@@ -85,11 +85,15 @@ extension PHAsset: Asset {
                 options: options) { (image, info) -> Void in
                     
                     guard let image = image else {
-                        completion(.Failure(AssetResultErrorType.Unknown))
+                        dispatch_async(dispatch_get_main_queue()) {
+                            completion(.Failure(AssetResultErrorType.Unknown))
+                        }
                         return
                     }
                     
-                    completion(.Success(image))
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(.Success(image))
+                    }
             }
     }
     
@@ -121,21 +125,37 @@ extension PHAsset: Asset {
                 }
             }
             
-           self.originalImageRequestID = PHImageManager.defaultManager().requestImageDataForAsset(self, options: options) { (imageData, UTI, orientation, info) -> Void in
-                
-                guard let imageData = imageData, let image = UIImage(data: imageData) else {
+            self.originalImageRequestID = PHImageManager.defaultManager().requestImageForAsset(
+                self,
+                targetSize: CGSize(width: self.pixelWidth, height: self.pixelHeight),
+                contentMode: PHImageContentMode.AspectFill,
+                options: options) { (image, info) -> Void in
                     
-                    dispatch_async(dispatch_get_main_queue()) {
+                    guard let image = image else {
                         completion(.Failure(AssetResultErrorType.Unknown))
+                        return
                     }
-                    return
-                }
-                
-                dispatch_async(dispatch_get_main_queue()) {
+                    
                     completion(.Success(image))
-                }
-                
             }
+            
+//           self.originalImageRequestID = PHImageManager.defaultManager().requestImageDataForAsset(self, options: options) { (imageData, UTI, orientation, info) -> Void in
+//                
+//            guard let imageData = imageData, let image = UIImage( else {
+//                
+//                dispatch_async(dispatch_get_main_queue()) {
+//                    completion(.Failure(AssetResultErrorType.Unknown))
+//                }
+//                return
+//            }
+//
+//            let image = UIImage(CIImage: ciimage, scale: 1, orientation: orientation)
+//            
+//            dispatch_async(dispatch_get_main_queue()) {
+//                completion(.Success(image))
+//            }
+//            
+//            }
     }
     
     public dynamic var originalImageDownloadProgress: NSProgress? {
