@@ -20,13 +20,6 @@ public enum PhotosProviderAuthorizationStatus : Int {
     case Authorized // User has authorized this application to access photos data.
 }
 
-func PPLog<T>(value: T) {
-    #if DEBUG
-        print(value, appendNewline: true)
-    #else
-    #endif
-}
-
 public struct PhotosProvider {
     
     public static var configuration: PhotosProviderConfiguration.Type = PhotosProviderDefaultConfiguration.self
