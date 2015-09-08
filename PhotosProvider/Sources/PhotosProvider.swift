@@ -49,7 +49,7 @@ public class PhotosProvider {
         }
     }
     
-    init(configuration: PhotosProviderConfiguration.Type) {
+    public init(configuration: PhotosProviderConfiguration.Type) {
         
         self.configuration = configuration
     }
@@ -62,7 +62,7 @@ public class PhotosProvider {
         
     }
     
-    public func fetchAllPhotos(title title: String) -> Collection {
+    public func fetchAllPhotos() -> Collection {
         
         if #available(iOS 8.0, *) {
             // Use Photos.framework
@@ -71,10 +71,15 @@ public class PhotosProvider {
             options.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: false),
             ]
-
-            let fetchResult = PHAsset.fetchAssetsWithOptions(options)
             
-            let collection = Collection(title: title, group: fetchResult)
+            let userLibrary: PHAssetCollection = PHAssetCollection.fetchAssetCollectionsWithType(
+                PHAssetCollectionType.SmartAlbum,
+                subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary,
+                options: nil).firstObject as! PHAssetCollection
+            
+            let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
+
+            let collection = Collection(title: userLibrary.localizedTitle ?? "", group: fetchResult)
             return collection
         } else {
             // Use AssetsLibrary.framework

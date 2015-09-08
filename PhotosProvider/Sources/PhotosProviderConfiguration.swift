@@ -28,30 +28,7 @@ public extension PhotosProviderConfiguration {
     @available(iOS 8.0, *)
     static func fetchAlbums() -> [PHAssetCollection] {
         
-        var collections: [PHAssetCollection] = []
-        
-        do {
-            let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
-            
-            topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
-                
-                if let collection = collection as? PHAssetCollection {
-                    collections.insert(collection, atIndex: 0)
-                }
-            }
-        }
-        
-        do {
-            let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
-            
-            smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
-                
-                if let collection = collection as? PHAssetCollection {
-                    collections.insert(collection, atIndex: 0)
-                }
-            }
-        }
-        
+        var albumCollections: [PHAssetCollection] = []
         do {
             let albumsResult = PHAssetCollection.fetchAssetCollectionsWithType(
                 PHAssetCollectionType.Album,
@@ -62,11 +39,37 @@ public extension PhotosProviderConfiguration {
             albumsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
                 
                 if let collection = collection as? PHAssetCollection {
-                    collections.insert(collection, atIndex: 0)
+                    albumCollections.insert(collection, atIndex: 0)
                 }
             }
         }
-        return collections
+        
+        var topLevelCollections: [PHAssetCollection] = []
+        do {
+            let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+            
+            topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+                
+                if let collection = collection as? PHAssetCollection {
+                    topLevelCollections.append(collection)
+                }
+            }
+        }
+        let userLibraryCollection: PHAssetCollection = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary, options: nil).firstObject as! PHAssetCollection
+        
+        var smartCollections: [PHAssetCollection] = []
+        do {
+            let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
+            
+            smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+                
+                if let collection = collection as? PHAssetCollection where collection != userLibraryCollection {
+                    smartCollections.append(collection)
+                }
+            }
+        }
+        
+        return [userLibraryCollection] + smartCollections + topLevelCollections + albumCollections
     }
     
     @available(iOS 8.0, *)
