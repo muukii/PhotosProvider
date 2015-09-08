@@ -80,7 +80,7 @@ extension PHFetchResult: AssetsGroup {
     
     public func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?) {
         
-        assert(self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
+        assert(self.count == 0 || self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -95,7 +95,7 @@ extension PHFetchResult: AssetsGroup {
     
     public func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?) {
         
-        assert(self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
+        assert(self.count == 0 || self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
         
         self.enumerateObjectsUsingBlock { (asset, index, stop) -> Void in
             
@@ -108,7 +108,7 @@ extension PHFetchResult: AssetsGroup {
         
     public subscript (index: Int) -> Asset? {
         
-        assert(self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
+        assert(self.count == 0 || self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
         
         return self.objectAtIndex(index) as? PHAsset
     }

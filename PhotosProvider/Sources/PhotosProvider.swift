@@ -20,9 +20,9 @@ public enum PhotosProviderAuthorizationStatus : Int {
     case Authorized // User has authorized this application to access photos data.
 }
 
-public struct PhotosProvider {
+public class PhotosProvider {
     
-    public static var configuration: PhotosProviderConfiguration.Type = PhotosProviderDefaultConfiguration.self
+    public let configuration: PhotosProviderConfiguration.Type
     
     public static var authorizationStatus: PhotosProviderAuthorizationStatus {
         
@@ -49,6 +49,11 @@ public struct PhotosProvider {
         }
     }
     
+    init(configuration: PhotosProviderConfiguration.Type) {
+        
+        self.configuration = configuration
+    }
+            
     public static func startPreheating() {
         
     }
@@ -57,7 +62,7 @@ public struct PhotosProvider {
         
     }
     
-    public static func fetchAllPhotos(title title: String) -> Collection {
+    public func fetchAllPhotos(title title: String) -> Collection {
         
         if #available(iOS 8.0, *) {
             // Use Photos.framework
@@ -78,7 +83,7 @@ public struct PhotosProvider {
         }
     }
     
-    public static func fetchAlbums() -> [Collection] {
+    public func fetchAlbums() -> [Collection] {
         
         if #available(iOS 8.0, *) {
             
@@ -101,8 +106,4 @@ public struct PhotosProvider {
             return []
         }
     }
-}
-
-private struct PhotosProviderDefaultConfiguration: PhotosProviderConfiguration {
-    
 }

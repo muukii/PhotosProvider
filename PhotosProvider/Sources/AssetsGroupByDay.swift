@@ -15,6 +15,10 @@ public struct AssetsGroupByDay {
         public var day: NSDate
         public var assets: [Asset]
         
+        var numberOfAssets: Int {
+            return self.assets.count            
+        }
+        
         public init(day: NSDate, assets: [Asset] = []) {
             
             self.day = day
@@ -24,10 +28,24 @@ public struct AssetsGroupByDay {
     
     public var dayAssets = [DayAssets]()
     
-    public subscript (date: NSDate) -> [Asset] {
+    public var numberOfDays: Int {
+        
+        return dayAssets.count
+    }
+    
+    public subscript (date date: NSDate) -> [Asset] {
 
         return self.dayAssets.filter { $0.day == date }.first?.assets ?? []
-
+    }
+    
+    public subscript (index: Int) -> DayAssets? {
+        
+        guard self.dayAssets.count > index else {
+            
+            return nil
+        }
+        
+        return self.dayAssets[index]
     }
     
     public func allDayAssets() -> [Asset] {

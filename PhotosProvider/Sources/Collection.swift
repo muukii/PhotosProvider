@@ -12,7 +12,6 @@ public struct Collection {
     
     public private(set) var title: String
     public private(set) var group: AssetsGroup
-    public private(set) var groupByDay: AssetsGroupByDay?
     
     public init(title: String, group: AssetsGroup, buildByDay: Bool = false) {
         
@@ -25,4 +24,20 @@ public struct Collection {
             }
         }
     }
+    
+    mutating func requestGroupByDay(completion: (groupByDay: AssetsGroupByDay) -> Void) {
+        
+        if let groupByDay = self.groupByDay {
+            completion(groupByDay: groupByDay)
+            return
+        }
+        
+        self.group.requestAssetsGroupByDays { _groupByDay in
+            
+            self.groupByDay = _groupByDay
+            completion(groupByDay: _groupByDay)
+        }
+    }
+    
+    private var groupByDay: AssetsGroupByDay?
 }

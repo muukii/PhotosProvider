@@ -76,3 +76,6 @@ public extension PhotosProviderConfiguration {
     }
 }
 
+struct PhotosProviderDefaultConfiguration: PhotosProviderConfiguration {
+    
+}
