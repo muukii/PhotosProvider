@@ -24,7 +24,7 @@ public protocol Asset {
     var duration: NSTimeInterval { get }
     
     var hidden: Bool { get }
-    var favorite: Bool { get }
+    var favoriteAsset: Bool { get }
     
     var originalImageDownloadProgress: NSProgress? { get }
     
@@ -54,6 +54,11 @@ public enum AssetMediaType: Int {
 
 @available(iOS 8.0, *)
 extension PHAsset: Asset {
+    
+    public var favoriteAsset: Bool {
+        
+        return self.favorite
+    }
     
     public var assetMediaType: AssetMediaType {
         
@@ -138,24 +143,6 @@ extension PHAsset: Asset {
                     
                     completion(.Success(image))
             }
-            
-//           self.originalImageRequestID = PHImageManager.defaultManager().requestImageDataForAsset(self, options: options) { (imageData, UTI, orientation, info) -> Void in
-//                
-//            guard let imageData = imageData, let image = UIImage( else {
-//                
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    completion(.Failure(AssetResultErrorType.Unknown))
-//                }
-//                return
-//            }
-//
-//            let image = UIImage(CIImage: ciimage, scale: 1, orientation: orientation)
-//            
-//            dispatch_async(dispatch_get_main_queue()) {
-//                completion(.Success(image))
-//            }
-//            
-//            }
     }
     
     public dynamic var originalImageDownloadProgress: NSProgress? {
@@ -286,7 +273,7 @@ extension ALAsset: Asset {
         return false
     }
     
-    public var favorite: Bool {
+    public var favoriteAsset: Bool {
         
         // TODO:
         return false
@@ -296,8 +283,7 @@ extension ALAsset: Asset {
         
 
     }
-    
-    
+        
     public func requestImage(
         targetSize targetSize: CGSize,
         progress: NSProgress? -> Void,
