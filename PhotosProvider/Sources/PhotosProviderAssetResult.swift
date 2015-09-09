@@ -1,5 +1,5 @@
 //
-//  AssetResult.swift
+//  PhotosProviderAssetResult.swift
 //  PhotosProvider
 //
 //  Created by Muukii on 9/3/15.
@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-public enum AssetResultErrorType: ErrorType {
+public enum PhotosProviderAssetResultErrorType: ErrorType {
     case Unknown
 }
 
-public enum AssetResult {
+public enum PhotosProviderAssetResult {
     case Success(UIImage)
     case Failure(ErrorType)
 }

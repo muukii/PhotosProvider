@@ -62,7 +62,7 @@ public class PhotosProvider {
         
     }
     
-    public func fetchAllPhotos() -> Collection {
+    public func fetchAllPhotos() -> PhotosProviderCollection {
         
         if #available(iOS 8.0, *) {
             // Use Photos.framework
@@ -79,7 +79,7 @@ public class PhotosProvider {
             
             let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
 
-            let collection = Collection(title: userLibrary.localizedTitle ?? "", group: fetchResult)
+            let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: fetchResult)
             return collection
         } else {
             // Use AssetsLibrary.framework
@@ -88,7 +88,7 @@ public class PhotosProvider {
         }
     }
     
-    public func fetchAlbums() -> [Collection] {
+    public func fetchAlbums() -> [PhotosProviderCollection] {
         
         if #available(iOS 8.0, *) {
             
@@ -104,7 +104,7 @@ public class PhotosProvider {
                 
                 let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: defaultOptions)
                 let title = $0.localizedTitle ?? ""
-                return Collection(title: title, group: _assets)
+                return PhotosProviderCollection(title: title, group: _assets)
             }
         } else {
             

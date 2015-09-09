@@ -1,5 +1,5 @@
 //
-//  AssetsGroup.swift
+//  PhotosProviderAssetsGroup.swift
 //  PhotosProvider
 //
 //  Created by Muukii on 8/7/15.
@@ -11,28 +11,28 @@ import Photos
 import AssetsLibrary
 import CoreLocation
 
-public protocol AssetsGroup {
+public protocol PhotosProviderAssetsGroup {
     
-    func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?)
-    func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?)
+    func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?)
+    func enumerateAssetsUsingBlock(block: ((asset: PhotosProviderAsset) -> Void)?)
     
     var count: Int { get }
     
-    subscript (index: Int) -> Asset? { get }
-    var first: Asset? { get }
-    var last: Asset? { get }
+    subscript (index: Int) -> PhotosProviderAsset? { get }
+    var first: PhotosProviderAsset? { get }
+    var last: PhotosProviderAsset? { get }
 }
 
-public class CustomAssetsGroup: AssetsGroup {
+public class CustomAssetsGroup: PhotosProviderAssetsGroup {
     
-    public private(set) var assets : [Asset] = []
+    public private(set) var assets : [PhotosProviderAsset] = []
     
-    public init(assets: [Asset]) {
+    public init(assets: [PhotosProviderAsset]) {
         
         self.assets = assets
     }
     
-    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?) {
+    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -45,7 +45,7 @@ public class CustomAssetsGroup: AssetsGroup {
         })
     }
     
-    public func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?) {
+    public func enumerateAssetsUsingBlock(block: ((asset: PhotosProviderAsset) -> Void)?) {
         
         let sortedAssets = self.assets.sort({ $0.creationDate?.compare($1.creationDate ?? NSDate()) == NSComparisonResult.OrderedDescending })
         for asset in sortedAssets {
@@ -59,26 +59,26 @@ public class CustomAssetsGroup: AssetsGroup {
         return self.assets.count
     }
     
-    public subscript (index: Int) -> Asset? {
+    public subscript (index: Int) -> PhotosProviderAsset? {
         
         return self.assets[index]
     }
     
-    public var first: Asset? {
+    public var first: PhotosProviderAsset? {
         
         return self.assets.first
     }
     
-    public var last: Asset? {
+    public var last: PhotosProviderAsset? {
         
         return self.assets.last
     }
 }
 
 @available(iOS 8.0, *)
-extension PHFetchResult: AssetsGroup {
+extension PHFetchResult: PhotosProviderAssetsGroup {
     
-    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?) {
+    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?) {
         
         assert(self.count == 0 || self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
         
@@ -93,7 +93,7 @@ extension PHFetchResult: AssetsGroup {
         })
     }
     
-    public func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?) {
+    public func enumerateAssetsUsingBlock(block: ((asset: PhotosProviderAsset) -> Void)?) {
         
         assert(self.count == 0 || self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
         
@@ -106,7 +106,7 @@ extension PHFetchResult: AssetsGroup {
         }
     }
         
-    public subscript (index: Int) -> Asset? {
+    public subscript (index: Int) -> PhotosProviderAsset? {
         
         assert(self.count == 0 || self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
         
@@ -114,20 +114,20 @@ extension PHFetchResult: AssetsGroup {
     }
     
     
-    public var first: Asset? {
+    public var first: PhotosProviderAsset? {
         
-        return self.firstObject as? Asset
+        return self.firstObject as? PhotosProviderAsset
     }
     
-    public var last: Asset? {
+    public var last: PhotosProviderAsset? {
         
-        return self.lastObject as? Asset
+        return self.lastObject as? PhotosProviderAsset
     }
 }
 
-extension ALAssetsGroup: AssetsGroup {
+extension ALAssetsGroup: PhotosProviderAssetsGroup {
     
-    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: AssetsGroupByDay) -> Void)?) {
+    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -140,7 +140,7 @@ extension ALAssetsGroup: AssetsGroup {
         })
     }
     
-    public func enumerateAssetsUsingBlock(block: ((asset: Asset) -> Void)?) {
+    public func enumerateAssetsUsingBlock(block: ((asset: PhotosProviderAsset) -> Void)?) {
 
         self.enumerateAssetsUsingBlock { (asset, index, stop) -> Void in
             
@@ -153,7 +153,7 @@ extension ALAssetsGroup: AssetsGroup {
         return self.count
     }
     
-    public subscript (index: Int) -> Asset? {
+    public subscript (index: Int) -> PhotosProviderAsset? {
         
         return self.assets?[index]
     }
@@ -190,22 +190,22 @@ extension ALAssetsGroup: AssetsGroup {
         static var assets: Void?
     }
     
-    public var first: Asset? {
+    public var first: PhotosProviderAsset? {
         
         return self.assets?.first
     }
     
-    public var last: Asset? {
+    public var last: PhotosProviderAsset? {
         
         return self.assets?.last
     }
 }
 
-private func divideByDay(dateSortedAssets dateSortedAssets: AssetsGroup) -> AssetsGroupByDay {
+private func divideByDay(dateSortedAssets dateSortedAssets: PhotosProviderAssetsGroup) -> PhotosProviderAssetsGroupByDay {
     
-    var dayAssets = AssetsGroupByDay()
+    var dayAssets = PhotosProviderAssetsGroupByDay()
     
-    var tmpDayAsset: AssetsGroupByDay.DayAssets!
+    var tmpDayAsset: PhotosProviderAssetsGroupByDay.DayAssets!
     var processingDate: NSDate!
     
     dateSortedAssets.enumerateAssetsUsingBlock { (asset) -> Void in
@@ -219,7 +219,7 @@ private func divideByDay(dateSortedAssets dateSortedAssets: AssetsGroup) -> Asse
         
         if tmpDayAsset == nil {
             
-            tmpDayAsset = AssetsGroupByDay.DayAssets(day: processingDate)
+            tmpDayAsset = PhotosProviderAssetsGroupByDay.DayAssets(day: processingDate)
         }
         
         tmpDayAsset.assets.append(asset)

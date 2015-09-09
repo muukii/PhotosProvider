@@ -1,5 +1,5 @@
 //
-//  Asset.swift
+//  PhotosProviderAsset.swift
 //  PhotosProvider
 //
 //  Created by Muukii on 8/7/15.
@@ -11,7 +11,7 @@ import Photos
 import AssetsLibrary
 import CoreLocation
 
-public protocol Asset {
+public protocol PhotosProviderAsset {
     
     var assetMediaType: AssetMediaType { get }
     var pixelWidth: Int { get }
@@ -31,13 +31,13 @@ public protocol Asset {
     func requestImage(
         targetSize targetSize: CGSize,
         progress: NSProgress? -> Void,
-        option: AssetOption?,
-        completion: AssetResult -> Void)
+        option: PhotosProviderAssetOption?,
+        completion: PhotosProviderAssetResult -> Void)
     
     func requestOriginalImage(
         progress progress: NSProgress? -> Void,
-        option: AssetOption?,
-        completion: AssetResult -> Void)
+        option: PhotosProviderAssetOption?,
+        completion: PhotosProviderAssetResult -> Void)
     
     func cancelRequestImage()
     func cancelRequestOriginalImage()
@@ -53,7 +53,7 @@ public enum AssetMediaType: Int {
 }
 
 @available(iOS 8.0, *)
-extension PHAsset: Asset {
+extension PHAsset: PhotosProviderAsset {
     
     public var favoriteAsset: Bool {
         
@@ -68,8 +68,8 @@ extension PHAsset: Asset {
     public func requestImage(
         targetSize targetSize: CGSize,
         progress: NSProgress? -> Void,
-        option: AssetOption?,
-        completion: AssetResult -> Void) {
+        option: PhotosProviderAssetOption?,
+        completion: PhotosProviderAssetResult -> Void) {
             
             // TODO: option
             
@@ -91,7 +91,7 @@ extension PHAsset: Asset {
                     
                     guard let image = image else {
                         dispatch_async(dispatch_get_main_queue()) {
-                            completion(.Failure(AssetResultErrorType.Unknown))
+                            completion(.Failure(PhotosProviderAssetResultErrorType.Unknown))
                         }
                         return
                     }
@@ -104,8 +104,8 @@ extension PHAsset: Asset {
     
     public func requestOriginalImage(
         progress progress: NSProgress? -> Void,
-        option: AssetOption?,
-        completion: AssetResult -> Void) {
+        option: PhotosProviderAssetOption?,
+        completion: PhotosProviderAssetResult -> Void) {
             
             // TODO: option
 
@@ -137,7 +137,7 @@ extension PHAsset: Asset {
                 options: options) { (image, info) -> Void in
                     
                     guard let image = image else {
-                        completion(.Failure(AssetResultErrorType.Unknown))
+                        completion(.Failure(PhotosProviderAssetResultErrorType.Unknown))
                         return
                     }
                     
@@ -230,7 +230,7 @@ extension PHAsset: Asset {
     
 }
 
-extension ALAsset: Asset {
+extension ALAsset: PhotosProviderAsset {
     
     public var assetMediaType: AssetMediaType {
         
@@ -287,13 +287,13 @@ extension ALAsset: Asset {
     public func requestImage(
         targetSize targetSize: CGSize,
         progress: NSProgress? -> Void,
-        option: AssetOption?,
-        completion: AssetResult -> Void) {
+        option: PhotosProviderAssetOption?,
+        completion: PhotosProviderAssetResult -> Void) {
             
             let cgimage = self.defaultRepresentation().fullScreenImage()
             
             guard let _cgimage = cgimage else {
-                completion(.Failure(AssetResultErrorType.Unknown))
+                completion(.Failure(PhotosProviderAssetResultErrorType.Unknown))
                 return
             }
             let image = UIImage(CGImage: _cgimage.takeUnretainedValue())
@@ -302,13 +302,13 @@ extension ALAsset: Asset {
     
     public func requestOriginalImage(
         progress progress: NSProgress? -> Void,
-        option: AssetOption?,
-        completion: AssetResult -> Void) {
+        option: PhotosProviderAssetOption?,
+        completion: PhotosProviderAssetResult -> Void) {
             
             let cgimage = self.defaultRepresentation().fullScreenImage()
             
             guard let _cgimage = cgimage else {
-                completion(.Failure(AssetResultErrorType.Unknown))
+                completion(.Failure(PhotosProviderAssetResultErrorType.Unknown))
                 return
             }
             let image = UIImage(CGImage: _cgimage.takeUnretainedValue())

@@ -10,7 +10,7 @@ import Foundation
 import Photos
 import AssetsLibrary
 
-class Monitor {
+class PhotosProviderMonitor {
     
     var didChange: (() -> Void)?
     

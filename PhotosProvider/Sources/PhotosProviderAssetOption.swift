@@ -1,5 +1,5 @@
 //
-//  AssetConfigration.swift
+//  PhotosProviderAssetOption.swift
 //  PhotosProvider
 //
 //  Created by Muukii on 9/3/15.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-public protocol AssetOption {
+public protocol PhotosProviderAssetOption {
     
 }

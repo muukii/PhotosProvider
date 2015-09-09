@@ -8,18 +8,18 @@
 
 import Foundation
 
-public struct AssetsGroupByDay {
+public struct PhotosProviderAssetsGroupByDay {
     
     public struct DayAssets {
         
         public var day: NSDate
-        public var assets: [Asset]
+        public var assets: [PhotosProviderAsset]
         
         var numberOfAssets: Int {
             return self.assets.count            
         }
         
-        public init(day: NSDate, assets: [Asset] = []) {
+        public init(day: NSDate, assets: [PhotosProviderAsset] = []) {
             
             self.day = day
             self.assets = assets
@@ -33,7 +33,7 @@ public struct AssetsGroupByDay {
         return dayAssets.count
     }
     
-    public subscript (date date: NSDate) -> [Asset] {
+    public subscript (date date: NSDate) -> [PhotosProviderAsset] {
 
         return self.dayAssets.filter { $0.day == date }.first?.assets ?? []
     }
@@ -48,8 +48,8 @@ public struct AssetsGroupByDay {
         return self.dayAssets[index]
     }
     
-    public func allDayAssets() -> [Asset] {
+    public func allDayAssets() -> [PhotosProviderAsset] {
         
-        return dayAssets.reduce([Asset]()) { $0 + $1.assets }
+        return dayAssets.reduce([PhotosProviderAsset]()) { $0 + $1.assets }
     }
 }
