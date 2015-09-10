@@ -62,7 +62,7 @@ public class PhotosProvider {
         
     }
     
-    public func fetchAllPhotos() -> PhotosProviderCollection {
+    public func fetchAllPhotos() -> PhotosProviderCollection? {
         
         if #available(iOS 8.0, *) {
             // Use Photos.framework
@@ -72,10 +72,12 @@ public class PhotosProvider {
                 NSSortDescriptor(key: "creationDate", ascending: false),
             ]
             
-            let userLibrary: PHAssetCollection = PHAssetCollection.fetchAssetCollectionsWithType(
+            guard let userLibrary = PHAssetCollection.fetchAssetCollectionsWithType(
                 PHAssetCollectionType.SmartAlbum,
                 subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary,
-                options: nil).firstObject as! PHAssetCollection
+                options: nil).firstObject as? PHAssetCollection else {
+                    return nil
+            }            
             
             let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
 
