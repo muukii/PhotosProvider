@@ -11,7 +11,11 @@ import Photos
 import AssetsLibrary
 import CoreLocation
 
-public protocol PhotosProviderAsset {
+func == (lhs: PhotosProviderAsset, rhs: PhotosProviderAsset) -> Bool {
+    return lhs === rhs
+}
+
+public protocol PhotosProviderAsset: class {
     
     var assetMediaType: AssetMediaType { get }
     var pixelWidth: Int { get }
@@ -41,7 +45,6 @@ public protocol PhotosProviderAsset {
     
     func cancelRequestImage()
     func cancelRequestOriginalImage()
-    
 }
 
 public enum AssetMediaType: Int {
@@ -227,7 +230,6 @@ extension PHAsset: PhotosProviderAsset {
         static var imageRequestID: Void?
         static var originalImageRequestID: Void?
     }
-    
 }
 
 extension ALAsset: PhotosProviderAsset {
