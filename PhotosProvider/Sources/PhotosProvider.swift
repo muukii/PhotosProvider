@@ -54,15 +54,24 @@ public class PhotosProvider {
         self.configuration = configuration
     }
             
-    public static func startPreheating() {
+    public func startPreheating() {
         
+        guard PhotosProvider.authorizationStatus == .Authorized else {
+            return
+        }
+        // TODO: Auth
+        self.fetchAlbums()
     }
     
-    public static func endPreheating() {
+    public func endPreheating() {
         
     }
     
     public func fetchAllPhotos() -> PhotosProviderCollection? {
+        
+        guard PhotosProvider.authorizationStatus == .Authorized else {
+            return nil
+        }
         
         if #available(iOS 8.0, *) {
             // Use Photos.framework
@@ -92,6 +101,15 @@ public class PhotosProvider {
     
     public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false) -> [PhotosProviderCollection] {
         
+        guard PhotosProvider.authorizationStatus == .Authorized else {
+            return []
+        }
+        
+        if let fetchedAlbums = self.fetchedAlbums {
+            
+            return fetchedAlbums
+        }
+        
         if #available(iOS 8.0, *) {
             
             let collections = self.configuration.fetchAlbums()
@@ -102,15 +120,21 @@ public class PhotosProvider {
                 ]
                 return options
                 }()
-            return collections.map {
+            let albums: [PhotosProviderCollection] = collections.map {
                 
                 let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: defaultOptions)
                 let title = $0.localizedTitle ?? ""
                 return PhotosProviderCollection(title: title, group: _assets, buildGroupByDay: buildGroupByDay)
             }
+            
+            self.fetchedAlbums = albums
+        
+            return albums
         } else {
             
             return []
         }
     }
+    
+    private var fetchedAlbums: [PhotosProviderCollection]?
 }
