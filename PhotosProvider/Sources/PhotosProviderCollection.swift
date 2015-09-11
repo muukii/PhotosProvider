@@ -8,7 +8,12 @@
 
 import Foundation
 
-public class PhotosProviderCollection {
+public func == (lhs: PhotosProviderCollection, rhs: PhotosProviderCollection) -> Bool {
+    
+    return lhs === rhs
+}
+
+public class PhotosProviderCollection: Hashable {
     
     public private(set) var title: String
     public private(set) var group: PhotosProviderAssetsGroup
@@ -40,4 +45,9 @@ public class PhotosProviderCollection {
     }
     
     private var groupByDay: PhotosProviderAssetsGroupByDay?
+    
+    public var hashValue: Int {
+        
+        return ObjectIdentifier(self).hashValue
+    }
 }
