@@ -64,38 +64,49 @@ public class PhotosProvider {
             return
         }
         // TODO: Auth
-        self.fetchAlbums()
+        self.fetchAlbums() { result in
+            
+        }
     }
     
     public func endPreheating() {
         
     }
     
-    public func fetchAllPhotos() -> PhotosProviderCollection? {
+    public func fetchAllPhotos(result: (PhotosProviderCollection?) -> Void) {
         
         guard PhotosProvider.authorizationStatus == .Authorized else {
-            return nil
+            return
         }
         
         if #available(iOS 8.0, *) {
             // Use Photos.framework
             
-            let options = self.configuration.fetchAllPhotosOptions()
-            options.sortDescriptors = [
-                NSSortDescriptor(key: "creationDate", ascending: false),
-            ]
+            GCDBlock.async(queue) {
+                
+                let options = self.configuration.fetchAllPhotosOptions()
+                options.sortDescriptors = [
+                    NSSortDescriptor(key: "creationDate", ascending: false),
+                ]
+                
+                guard let userLibrary = PHAssetCollection.fetchAssetCollectionsWithType(
+                    PHAssetCollectionType.SmartAlbum,
+                    subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary,
+                    options: nil).firstObject as? PHAssetCollection else {
+                        return
+                }
+                
+                let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
+                
+                let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: fetchResult)
+                
+                GCDBlock.async(.Main) {
+                    
+                    result(collection)
+                }
+            }
             
-            guard let userLibrary = PHAssetCollection.fetchAssetCollectionsWithType(
-                PHAssetCollectionType.SmartAlbum,
-                subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary,
-                options: nil).firstObject as? PHAssetCollection else {
-                    return nil
-            }            
             
-            let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
-
-            let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: fetchResult)
-            return collection
         } else {
             // Use AssetsLibrary.framework
             
@@ -103,15 +114,16 @@ public class PhotosProvider {
         }
     }
     
-    public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false) -> [PhotosProviderCollection] {
+    public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false, result: [PhotosProviderCollection] -> Void) {
         
         guard PhotosProvider.authorizationStatus == .Authorized else {
-            return []
+            return
         }
         
         if let fetchedAlbums = self.fetchedAlbums {
             
-            return fetchedAlbums
+            result(fetchedAlbums)
+            return
         }
         
         if #available(iOS 8.0, *) {
@@ -133,12 +145,14 @@ public class PhotosProvider {
             
             self.fetchedAlbums = albums
         
-            return albums
+            result(albums)
         } else {
             
-            return []
+            // TODO:
         }
     }
     
     private var fetchedAlbums: [PhotosProviderCollection]?
+    
+    private var queue: GCDQueue = GCDQueue.createSerial("me.muukii.PhotosProvider.queue")
 }

@@ -11,6 +11,10 @@ import Photos
 import AssetsLibrary
 import CoreLocation
 
+#if IMPORT_MODULES
+    import GCDKit
+#endif
+
 public protocol PhotosProviderAssetsGroup {
     
     func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?)
@@ -34,15 +38,14 @@ public class CustomAssetsGroup: PhotosProviderAssetsGroup {
     
     public func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?) {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+        GCDBlock.async(.Default) {
             
             let dividedAssets = divideByDay(dateSortedAssets: self)
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
+            GCDBlock.async(.Main) {
                 result?(assetsGroupByDay: dividedAssets)
-            })
-        })
+            }
+        }
     }
     
     public func enumerateAssetsUsingBlock(block: ((asset: PhotosProviderAsset) -> Void)?) {
@@ -82,15 +85,14 @@ extension PHFetchResult: PhotosProviderAssetsGroup {
         
         assert(self.count == 0 || self.firstObject is PHAsset, "AssetsGroup must be PHFetchResult of PHAsset.")
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+        GCDBlock.async(.Default) {
             
             let dividedAssets = divideByDay(dateSortedAssets: self)
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
+            GCDBlock.async(.Main) {
                 result?(assetsGroupByDay: dividedAssets)
-            })
-        })
+            }
+        }
     }
     
     public func enumerateAssetsUsingBlock(block: ((asset: PhotosProviderAsset) -> Void)?) {
@@ -129,15 +131,14 @@ extension ALAssetsGroup: PhotosProviderAssetsGroup {
     
     public func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?) {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+        GCDBlock.async(.Default) {
             
             let dividedAssets = divideByDay(dateSortedAssets: self)
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
+            GCDBlock.async(.Main) {
                 result?(assetsGroupByDay: dividedAssets)
-            })
-        })
+            }
+        }
     }
     
     public func enumerateAssetsUsingBlock(block: ((asset: PhotosProviderAsset) -> Void)?) {
