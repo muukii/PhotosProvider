@@ -32,12 +32,12 @@ public protocol PhotosProviderAsset {
         targetSize targetSize: CGSize,
         progress: NSProgress? -> Void,
         option: PhotosProviderAssetOption?,
-        completion: PhotosProviderAssetResult -> Void)
+        completion: (PhotosProviderAsset, PhotosProviderAssetResult) -> Void)
     
     func requestOriginalImage(
         progress progress: NSProgress? -> Void,
         option: PhotosProviderAssetOption?,
-        completion: PhotosProviderAssetResult -> Void)
+        completion: (PhotosProviderAsset, PhotosProviderAssetResult) -> Void)
     
     func cancelRequestImage()
     func cancelRequestOriginalImage()
@@ -69,7 +69,7 @@ extension PHAsset: PhotosProviderAsset {
         targetSize targetSize: CGSize,
         progress: NSProgress? -> Void,
         option: PhotosProviderAssetOption?,
-        completion: PhotosProviderAssetResult -> Void) {
+        completion: (PhotosProviderAsset, PhotosProviderAssetResult) -> Void) {
             
             // TODO: option
             
@@ -91,13 +91,13 @@ extension PHAsset: PhotosProviderAsset {
                     
                     guard let image = image else {
                         dispatch_async(dispatch_get_main_queue()) {
-                            completion(.Failure(PhotosProviderAssetResultErrorType.Unknown))
+                            completion(self, .Failure(PhotosProviderAssetResultErrorType.Unknown))
                         }
                         return
                     }
                     
                     dispatch_async(dispatch_get_main_queue()) {
-                        completion(.Success(image))
+                        completion(self, .Success(image))
                     }
             }
     }
@@ -105,7 +105,7 @@ extension PHAsset: PhotosProviderAsset {
     public func requestOriginalImage(
         progress progress: NSProgress? -> Void,
         option: PhotosProviderAssetOption?,
-        completion: PhotosProviderAssetResult -> Void) {
+        completion: (PhotosProviderAsset, PhotosProviderAssetResult) -> Void) {
             
             // TODO: option
 
@@ -137,11 +137,11 @@ extension PHAsset: PhotosProviderAsset {
                 options: options) { (image, info) -> Void in
                     
                     guard let image = image else {
-                        completion(.Failure(PhotosProviderAssetResultErrorType.Unknown))
+                        completion(self, .Failure(PhotosProviderAssetResultErrorType.Unknown))
                         return
                     }
                     
-                    completion(.Success(image))
+                    completion(self, .Success(image))
             }
     }
     
@@ -288,31 +288,31 @@ extension ALAsset: PhotosProviderAsset {
         targetSize targetSize: CGSize,
         progress: NSProgress? -> Void,
         option: PhotosProviderAssetOption?,
-        completion: PhotosProviderAssetResult -> Void) {
+        completion: (PhotosProviderAsset, PhotosProviderAssetResult) -> Void) {
             
             let cgimage = self.defaultRepresentation().fullScreenImage()
             
             guard let _cgimage = cgimage else {
-                completion(.Failure(PhotosProviderAssetResultErrorType.Unknown))
+                completion(self, .Failure(PhotosProviderAssetResultErrorType.Unknown))
                 return
             }
             let image = UIImage(CGImage: _cgimage.takeUnretainedValue())
-            completion(.Success(image))
+            completion(self, .Success(image))
     }
     
     public func requestOriginalImage(
         progress progress: NSProgress? -> Void,
         option: PhotosProviderAssetOption?,
-        completion: PhotosProviderAssetResult -> Void) {
+        completion: (PhotosProviderAsset, PhotosProviderAssetResult) -> Void) {
             
             let cgimage = self.defaultRepresentation().fullScreenImage()
             
             guard let _cgimage = cgimage else {
-                completion(.Failure(PhotosProviderAssetResultErrorType.Unknown))
+                completion(self, .Failure(PhotosProviderAssetResultErrorType.Unknown))
                 return
             }
             let image = UIImage(CGImage: _cgimage.takeUnretainedValue())
-            completion(.Success(image))
+            completion(self, .Success(image))
     }
     
     public dynamic var originalImageDownloadProgress: NSProgress? {

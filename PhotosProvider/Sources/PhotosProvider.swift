@@ -90,7 +90,7 @@ public class PhotosProvider {
         }
     }
     
-    public func fetchAlbums() -> [PhotosProviderCollection] {
+    public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false) -> [PhotosProviderCollection] {
         
         if #available(iOS 8.0, *) {
             
@@ -106,7 +106,7 @@ public class PhotosProvider {
                 
                 let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: defaultOptions)
                 let title = $0.localizedTitle ?? ""
-                return PhotosProviderCollection(title: title, group: _assets)
+                return PhotosProviderCollection(title: title, group: _assets, buildGroupByDay: buildGroupByDay)
             }
         } else {
             
