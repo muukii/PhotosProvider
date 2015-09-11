@@ -10,6 +10,10 @@ import Foundation
 import Photos
 import AssetsLibrary
 
+#if IMPORT_MODULES
+    import GCDKit
+#endif
+
 public enum PhotosProviderAuthorizationStatus : Int {
     
     case NotDetermined // User has not yet made a choice with regards to this application

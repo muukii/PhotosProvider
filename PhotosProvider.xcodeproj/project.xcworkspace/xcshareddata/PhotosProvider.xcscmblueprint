@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "57628A17D006D85FB2F1AE6FD97B9B2079965F18",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "8B2E522D57154DFA93A06982C36315ECBEA4FA97" : 0,
+    "57628A17D006D85FB2F1AE6FD97B9B2079965F18" : 0,
+    "54450C21EDE89D5FAF7B7B353913149EF9D110C0" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "39BC9AF0-5246-48F3-8677-370D57B047A9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "8B2E522D57154DFA93A06982C36315ECBEA4FA97" : "PhotosProvider\/Frameworks\/GCDKit\/",
+    "57628A17D006D85FB2F1AE6FD97B9B2079965F18" : "PhotosProvider\/",
+    "54450C21EDE89D5FAF7B7B353913149EF9D110C0" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PhotosProvider",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "PhotosProvider.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:eure\/couples-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "54450C21EDE89D5FAF7B7B353913149EF9D110C0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/muukii0803\/PhotosProvider.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "57628A17D006D85FB2F1AE6FD97B9B2079965F18"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/JohnEstropia\/GCDKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8B2E522D57154DFA93A06982C36315ECBEA4FA97"
+    }
+  ]
+}

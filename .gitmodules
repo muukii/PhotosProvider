@@ -1,0 +1,3 @@
+[submodule "Frameworks/GCDKit"]
+	path = Frameworks/GCDKit
+	url = https://github.com/JohnEstropia/GCDKit.git
