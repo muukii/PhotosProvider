@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct PhotosProviderAssetsGroupByDay {
+public class PhotosProviderAssetsGroupByDay {
     
-    public struct DayAssets {
+    public class DayAssets {
         
         public var day: NSDate
         public var assets: [PhotosProviderAsset]

@@ -204,7 +204,7 @@ extension ALAssetsGroup: PhotosProviderAssetsGroup {
 
 private func divideByDay(dateSortedAssets dateSortedAssets: PhotosProviderAssetsGroup) -> PhotosProviderAssetsGroupByDay {
     
-    var dayAssets = PhotosProviderAssetsGroupByDay()
+    let dayAssets = PhotosProviderAssetsGroupByDay()
     
     var tmpDayAsset: PhotosProviderAssetsGroupByDay.DayAssets!
     var processingDate: NSDate!
@@ -214,13 +214,13 @@ private func divideByDay(dateSortedAssets dateSortedAssets: PhotosProviderAssets
         processingDate = dateWithOutTime(asset.creationDate)
         if tmpDayAsset != nil && processingDate.isEqualToDate(tmpDayAsset!.day) == false {
             
-            dayAssets.dayAssets.append(tmpDayAsset!)
             tmpDayAsset = nil
         }
         
         if tmpDayAsset == nil {
             
             tmpDayAsset = PhotosProviderAssetsGroupByDay.DayAssets(day: processingDate)
+            dayAssets.dayAssets.append(tmpDayAsset!)
         }
         
         tmpDayAsset.assets.append(asset)
