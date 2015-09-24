@@ -11,9 +11,9 @@ import Photos
 import AssetsLibrary
 import CoreLocation
 
-//#if IMPORT_MODULES
+#if !PHOTOSPROVIDER_EXCULE_IMPORT_MODULES
     import GCDKit
-//#endif
+#endif
 
 public protocol PhotosProviderAssetsGroup {
     

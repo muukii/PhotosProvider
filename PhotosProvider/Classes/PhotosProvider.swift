@@ -10,9 +10,9 @@ import Foundation
 import Photos
 import AssetsLibrary
 
-//#if IMPORT_MODULES
+#if !PHOTOSPROVIDER_EXCULE_IMPORT_MODULES
     import GCDKit
-//#endif
+#endif
 
 public enum PhotosProviderAuthorizationStatus : Int {
     
