@@ -17,9 +17,9 @@ Pod::Spec.new do |s|
 
   s.name         = "PhotosProvider"
   s.version      = "0.0.1"
-  s.summary      = "A short description of PhotosProvider."
+  s.summary      = "Use combined PhotoObjects."
 
-  s.description  = "Easy PhotosFramework"
+  s.description  = "You can use Photos Framework easily"
 
   s.homepage     = "http://github.com/muukii0803/PhotosProvider" 
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
