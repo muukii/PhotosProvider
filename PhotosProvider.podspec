@@ -19,9 +19,9 @@ Pod::Spec.new do |s|
   s.version      = "0.0.1"
   s.summary      = "A short description of PhotosProvider."
 
-  s.description  = Easy PhotosFramework
+  s.description  = "Easy PhotosFramework"
 
-  s.homepage     = "http://EXAMPLE/PhotosProvider" 
+  s.homepage     = "http://github.com/muukii0803/PhotosProvider" 
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -83,7 +83,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Classes", "Classes/**/*.{h,m}"
+  s.source_files  = "PhotosProvider/Classes/**/*.swift"
   s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
