@@ -26,6 +26,8 @@ public enum PhotosProviderAuthorizationStatus : Int {
 
 public class PhotosProvider {
     
+    public var libraryDidChanged: (() -> Void)?
+    
     public let configuration: PhotosProviderConfiguration.Type
     
     public static var authorizationStatus: PhotosProviderAuthorizationStatus {
@@ -56,8 +58,20 @@ public class PhotosProvider {
     public init(configuration: PhotosProviderConfiguration.Type) {
         
         self.configuration = configuration
+        self.monitor.startObserving()
+        
+        if #available(iOS 8.0, *) {
+            self.monitor.photosDidChange = { [weak self] change in
+                
+                self?.fetchedAlbums = nil                
+            }
+        } else {
+            self.monitor.assetsLibraryDidChange = { notification in
+                
+            }
+        }
     }
-            
+    
     public func startPreheating() {
         
         guard PhotosProvider.authorizationStatus == .Authorized else {
@@ -152,7 +166,12 @@ public class PhotosProvider {
         }
     }
     
+    deinit {
+        monitor.endObserving()
+    }
+    
     private var fetchedAlbums: [PhotosProviderCollection]?
     
-    private var queue: GCDQueue = GCDQueue.createSerial("me.muukii.PhotosProvider.queue")
+    private let queue: GCDQueue = GCDQueue.createSerial("me.muukii.PhotosProvider.queue")
+    private let monitor = PhotosProviderMonitor()
 }

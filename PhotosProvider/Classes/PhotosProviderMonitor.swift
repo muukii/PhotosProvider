@@ -12,7 +12,8 @@ import AssetsLibrary
 
 class PhotosProviderMonitor {
     
-    var didChange: (() -> Void)?
+    var photosDidChange: ((PHChange) -> Void)?
+    var assetsLibraryDidChange: ((NSNotification) -> Void)?
     
     private(set) var isObserving: Bool = false
     
@@ -22,7 +23,7 @@ class PhotosProviderMonitor {
         
         if #available(iOS 8.0, *) {
             
-            //            PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+            PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self.photosLibraryObserver)
         } else {
             
             NSNotificationCenter.defaultCenter().addObserver(self, selector: "assetsLibraryDidChange:", name: ALAssetsLibraryChangedNotification, object: nil)
@@ -35,7 +36,7 @@ class PhotosProviderMonitor {
         
         if #available(iOS 8.0, *) {
             
-            //            PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+            PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self.photosLibraryObserver)
         } else {
             
             NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -44,13 +45,25 @@ class PhotosProviderMonitor {
     
     private dynamic func assetsLibraryDidChange(notification: NSNotification) {
         
-        self.didChange?()
+        self.assetsLibraryDidChange?(notification)
     }
+    
+    private lazy var photosLibraryObserver: PhotosLibraryObserver = { [weak self] in
+        let observer = PhotosLibraryObserver()
+        observer.didChange = { change in
+            
+            self?.photosDidChange?(change)
+        }
+        return observer
+    }()
 }
 
-//extension PhotosPickerLibraryObserver: PHPhotoLibraryChangeObserver {
-//
-//    func photoLibraryDidChange(changeInstance: PHChange) {
-//        //
-//        }
-//}
+@available(iOS 8.0, *)
+private class PhotosLibraryObserver: NSObject, PHPhotoLibraryChangeObserver {
+    
+    var didChange: ((PHChange) -> Void)?
+    @objc private func photoLibraryDidChange(changeInstance: PHChange) {
+        
+        didChange?(changeInstance)
+    }
+}
