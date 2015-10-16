@@ -12,10 +12,13 @@ import AssetsLibrary
 import CoreLocation
 
 func == (lhs: PhotosProviderAsset, rhs: PhotosProviderAsset) -> Bool {
-    return lhs === rhs
+    
+    return lhs.localIdentifier == rhs.localIdentifier
 }
 
 public protocol PhotosProviderAsset: class {
+    
+    var localIdentifier: String { get }
     
     var assetMediaType: AssetMediaType { get }
     var pixelWidth: Int { get }
@@ -233,6 +236,11 @@ extension PHAsset: PhotosProviderAsset {
 }
 
 extension ALAsset: PhotosProviderAsset {
+    
+    public var localIdentifier: String {
+        
+        return self.valueForProperty(ALAssetPropertyAssetURL) as! String
+    }
     
     public var assetMediaType: AssetMediaType {
         
