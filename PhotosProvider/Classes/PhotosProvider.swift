@@ -63,10 +63,17 @@ public class PhotosProvider {
         if #available(iOS 8.0, *) {
             self.monitor.photosDidChange = { [weak self] change in
                 
-                self?.fetchedAlbums = nil
-                self?.fetchAlbums() { _ in
+                guard let strongSelf = self else {
+                    return
+                }
+                
+                if let _ = strongSelf.cachedFetchedAlbums, buildGroupdByDay = strongSelf.cachedBuildGroupByDay {
                     
-                    self?.libraryDidChanged?()
+                    strongSelf.cachedFetchedAlbums = nil
+                    self?.fetchAlbums(buildGroupByDay: buildGroupdByDay) { _ in
+                        
+                        self?.libraryDidChanged?()
+                    }
                 }
             }
         } else {
@@ -138,7 +145,7 @@ public class PhotosProvider {
             return
         }
         
-        if let fetchedAlbums = self.fetchedAlbums {
+        if let fetchedAlbums = self.cachedFetchedAlbums {
             
             result(fetchedAlbums)
             return
@@ -161,7 +168,8 @@ public class PhotosProvider {
                 return PhotosProviderCollection(title: title, group: _assets, buildGroupByDay: buildGroupByDay)
             }
             
-            self.fetchedAlbums = albums
+            self.cachedFetchedAlbums = albums
+            self.cachedBuildGroupByDay = buildGroupByDay
         
             result(albums)
         } else {
@@ -174,7 +182,8 @@ public class PhotosProvider {
         monitor.endObserving()
     }
     
-    private var fetchedAlbums: [PhotosProviderCollection]?
+    private var cachedFetchedAlbums: [PhotosProviderCollection]?
+    private var cachedBuildGroupByDay: Bool?
     
     private let queue: GCDQueue = GCDQueue.createSerial("me.muukii.PhotosProvider.queue")
     private let monitor = PhotosProviderMonitor()
