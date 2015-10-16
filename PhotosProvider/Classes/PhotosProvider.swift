@@ -63,7 +63,11 @@ public class PhotosProvider {
         if #available(iOS 8.0, *) {
             self.monitor.photosDidChange = { [weak self] change in
                 
-                self?.fetchedAlbums = nil                
+                self?.fetchedAlbums = nil
+                self?.fetchAlbums() { _ in
+                    
+                    self?.libraryDidChanged?()
+                }
             }
         } else {
             self.monitor.assetsLibraryDidChange = { notification in
@@ -128,7 +132,7 @@ public class PhotosProvider {
         }
     }
     
-    public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false, result: [PhotosProviderCollection] -> Void) {
+    public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false, @noescape result: [PhotosProviderCollection] -> Void) {
         
         guard PhotosProvider.authorizationStatus == .Authorized else {
             return
