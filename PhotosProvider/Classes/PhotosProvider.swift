@@ -10,7 +10,7 @@ import Foundation
 import Photos
 import AssetsLibrary
 
-#if !PHOTOSPROVIDER_EXCULE_IMPORT_MODULES
+#if !PHOTOSPROVIDER_EXCLUDE_IMPORT_MODULES
     import GCDKit
 #endif
 

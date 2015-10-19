@@ -11,7 +11,7 @@ import Photos
 import AssetsLibrary
 import CoreLocation
 
-#if !PHOTOSPROVIDER_EXCULE_IMPORT_MODULES
+#if !PHOTOSPROVIDER_EXCLUDE_IMPORT_MODULES
     import GCDKit
 #endif
 
