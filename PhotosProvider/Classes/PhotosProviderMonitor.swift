@@ -12,7 +12,7 @@ import AssetsLibrary
 
 class PhotosProviderMonitor {
     
-    var photosDidChange: ((PHChange) -> Void)?
+    var photosDidChange: ((PhotosProviderChange) -> Void)?
     var assetsLibraryDidChange: ((NSNotification) -> Void)?
     
     private(set) var isObserving: Bool = false
@@ -48,6 +48,7 @@ class PhotosProviderMonitor {
         self.assetsLibraryDidChange?(notification)
     }
     
+    @available(iOS 8.0, *)
     private lazy var photosLibraryObserver: PhotosLibraryObserver = { [weak self] in
         let observer = PhotosLibraryObserver()
         observer.didChange = { change in
@@ -57,6 +58,10 @@ class PhotosProviderMonitor {
         return observer
     }()
 }
+
+protocol PhotosProviderChange {}
+@available(iOS 8.0, *)
+extension PHChange: PhotosProviderChange {}
 
 @available(iOS 8.0, *)
 private class PhotosLibraryObserver: NSObject, PHPhotoLibraryChangeObserver {
