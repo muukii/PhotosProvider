@@ -67,7 +67,7 @@ public class PhotosProvider {
                     return
                 }
                 
-                if let _ = strongSelf.cachedFetchedAlbums, buildGroupdByDay = strongSelf.cachedBuildGroupByDay {
+                if let _ = strongSelf.cachedFetchedAlbums, buildGroupdByDay = strongSelf.cachedBuildGroupByDay ?? false {
                     
                     strongSelf.cachedFetchedAlbums = nil
                     self?.fetchAlbums(buildGroupByDay: buildGroupdByDay) { _ in
