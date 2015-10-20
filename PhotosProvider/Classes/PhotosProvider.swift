@@ -68,11 +68,11 @@ public class PhotosProvider {
                 }
                 
                 let buildGroupdByDay = strongSelf.cachedBuildGroupByDay ?? false
-                if let _ = strongSelf.cachedFetchedAlbums {
+                
+                strongSelf.cachedFetchedAlbums = nil
+                self?.fetchAlbums(buildGroupByDay: buildGroupdByDay) { _ in
                     
-                    strongSelf.cachedFetchedAlbums = nil
-                    self?.fetchAlbums(buildGroupByDay: buildGroupdByDay) { _ in
-                        
+                    GCDBlock.async(.Main) {
                         self?.libraryDidChanged?()
                     }
                 }
