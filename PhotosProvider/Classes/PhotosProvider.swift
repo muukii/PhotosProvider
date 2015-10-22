@@ -28,7 +28,7 @@ public class PhotosProvider {
     
     public var libraryDidChanged: (() -> Void)?
     
-    public let configuration: PhotosProviderConfiguration.Type
+    public let configuration: PhotosProviderConfiguration
     
     public static var authorizationStatus: PhotosProviderAuthorizationStatus {
         
@@ -55,7 +55,7 @@ public class PhotosProvider {
         }
     }
     
-    public init(configuration: PhotosProviderConfiguration.Type) {
+    public init(configuration: PhotosProviderConfiguration) {
         
         self.configuration = configuration
         self.monitor.startObserving()
