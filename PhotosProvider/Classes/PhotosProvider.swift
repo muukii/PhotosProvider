@@ -47,7 +47,10 @@ public class PhotosProvider {
             
             PHPhotoLibrary.requestAuthorization({ (status) -> Void in
                 let status = PhotosProviderAuthorizationStatus(rawValue: status.rawValue)!
-                handler?(status)
+                
+                GCDBlock.async(.Main) {
+                    handler?(status)
+                }
             })
         } else {
             
