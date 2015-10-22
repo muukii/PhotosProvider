@@ -58,6 +58,9 @@ public class PhotosProviderCollection: Hashable {
                     assert(false, "sourceCollection is not PHAssetCollection")
                 }
                 let fetchOptions = self.configuration.fetchPhotosOptions()
+                fetchOptions.sortDescriptors = [
+                    NSSortDescriptor(key: "creationDate", ascending: false),
+                ]
                 let _assets = PHAsset.fetchAssetsInAssetCollection(collection, options: fetchOptions)
                 self.group = _assets
                 

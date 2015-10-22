@@ -163,10 +163,7 @@ public class PhotosProvider {
             // Using Photos Framework
             
             let collections = self.configuration.fetchAlbums()
-            let fetchOptions = self.configuration.fetchPhotosOptions()
-            fetchOptions.sortDescriptors = [
-                NSSortDescriptor(key: "creationDate", ascending: false),
-            ]
+           
             let albums: [PhotosProviderCollection] = collections.map { collection in
                 
                 let title = collection.localizedTitle ?? ""
