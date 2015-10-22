@@ -47,7 +47,9 @@ public class PhotosProviderCollection: Hashable {
         
         if let group = self.group {
             completion(group: group)
+            return
         }
+        
         if #available(iOS 8.0, *) {
             
             GCDBlock.async(.Default) {
