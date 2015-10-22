@@ -64,6 +64,7 @@ public class PhotosProvider {
         self.monitor.startObserving()
         
         if #available(iOS 8.0, *) {
+            
             self.monitor.photosDidChange = { [weak self] change in
                 
                 guard let strongSelf = self else {
@@ -81,6 +82,7 @@ public class PhotosProvider {
                 }
             }
         } else {
+            
             self.monitor.assetsLibraryDidChange = { notification in
                 
             }
@@ -92,9 +94,10 @@ public class PhotosProvider {
         guard PhotosProvider.authorizationStatus == .Authorized else {
             return
         }
-        // TODO: Auth
+
         self.fetchAlbums() { result in
             
+            // Finish Preheat
         }
     }
     
@@ -113,7 +116,7 @@ public class PhotosProvider {
             
             GCDBlock.async(queue) {
                 
-                let options = self.configuration.fetchAllPhotosOptions()
+                let options = self.configuration.fetchPhotosOptions()
                 options.sortDescriptors = [
                     NSSortDescriptor(key: "creationDate", ascending: false),
                 ]
@@ -157,17 +160,16 @@ public class PhotosProvider {
         
         if #available(iOS 8.0, *) {
             
+            // Using Photos Framework
+            
             let collections = self.configuration.fetchAlbums()
-            let defaultOptions: PHFetchOptions = {
-                let options = PHFetchOptions()
-                options.sortDescriptors = [
-                    NSSortDescriptor(key: "creationDate", ascending: false),
-                ]
-                return options
-                }()
+            let fetchOptions = self.configuration.fetchPhotosOptions()
+            fetchOptions.sortDescriptors = [
+                NSSortDescriptor(key: "creationDate", ascending: false),
+            ]
             let albums: [PhotosProviderCollection] = collections.map {
                 
-                let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: defaultOptions)
+                let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: fetchOptions)
                 let title = $0.localizedTitle ?? ""
                 return PhotosProviderCollection(title: title, group: _assets, buildGroupByDay: buildGroupByDay)
             }
@@ -177,6 +179,8 @@ public class PhotosProvider {
         
             result(albums)
         } else {
+            
+            // Using AssetsLibrary Framework
             
             // TODO:
         }

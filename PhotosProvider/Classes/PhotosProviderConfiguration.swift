@@ -16,7 +16,7 @@ public protocol PhotosProviderConfiguration {
     func fetchAlbums() -> [PHAssetCollection]
     
     @available(iOS 8.0, *)
-    func fetchAllPhotosOptions() -> PHFetchOptions
+    func fetchPhotosOptions() -> PHFetchOptions
     
     // MARK: iOS7 AssetsLibrary.framework
     
@@ -73,7 +73,7 @@ public extension PhotosProviderConfiguration {
     }
     
     @available(iOS 8.0, *)
-    func fetchAllPhotosOptions() -> PHFetchOptions {
+    func fetchPhotosOptions() -> PHFetchOptions {
         
         return PHFetchOptions()
     }
