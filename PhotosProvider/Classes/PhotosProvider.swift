@@ -130,7 +130,7 @@ public class PhotosProvider {
                 
                 let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
                 
-                let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: fetchResult)
+                let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: fetchResult, configuration: self.configuration)
                 
                 GCDBlock.async(.Main) {
                     
@@ -167,11 +167,10 @@ public class PhotosProvider {
             fetchOptions.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: false),
             ]
-            let albums: [PhotosProviderCollection] = collections.map {
+            let albums: [PhotosProviderCollection] = collections.map { collection in
                 
-                let _assets = PHAsset.fetchAssetsInAssetCollection($0, options: fetchOptions)
-                let title = $0.localizedTitle ?? ""
-                return PhotosProviderCollection(title: title, group: _assets, buildGroupByDay: buildGroupByDay)
+                let title = collection.localizedTitle ?? ""
+                return PhotosProviderCollection(title: title, sourceCollection: collection, configuration: self.configuration)
             }
             
             self.cachedFetchedAlbums = albums
