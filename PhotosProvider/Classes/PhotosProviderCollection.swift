@@ -60,6 +60,7 @@ public class PhotosProviderCollection: Hashable {
             let operation = NSBlockOperation {
                 guard let collection = self.sourceCollection as? PHAssetCollection else {
                     assert(false, "sourceCollection is not PHAssetCollection")
+                    return
                 }
                 let fetchOptions = self.configuration.fetchPhotosOptions()
                 fetchOptions.sortDescriptors = [
