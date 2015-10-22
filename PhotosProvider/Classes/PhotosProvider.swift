@@ -146,7 +146,7 @@ public class PhotosProvider {
         }
     }
     
-    public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false, @noescape result: [PhotosProviderCollection] -> Void) {
+    public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false, result: [PhotosProviderCollection] -> Void) {
         
         guard PhotosProvider.authorizationStatus == .Authorized else {
             return
@@ -161,19 +161,24 @@ public class PhotosProvider {
         if #available(iOS 8.0, *) {
             
             // Using Photos Framework
-            
-            let collections = self.configuration.fetchAlbums()
-           
-            let albums: [PhotosProviderCollection] = collections.map { collection in
+            GCDBlock.async(queue) {
                 
-                let title = collection.localizedTitle ?? ""
-                return PhotosProviderCollection(title: title, sourceCollection: collection, configuration: self.configuration)
+                let collections = self.configuration.fetchAlbums()
+                
+                let albums: [PhotosProviderCollection] = collections.map { collection in
+                    
+                    let title = collection.localizedTitle ?? ""
+                    return PhotosProviderCollection(title: title, sourceCollection: collection, configuration: self.configuration)
+                }
+                
+                self.cachedFetchedAlbums = albums
+                self.cachedBuildGroupByDay = buildGroupByDay
+                
+                GCDBlock.async(.Main) {
+                    result(albums)
+                }
             }
             
-            self.cachedFetchedAlbums = albums
-            self.cachedBuildGroupByDay = buildGroupByDay
-        
-            result(albums)
         } else {
             
             // Using AssetsLibrary Framework
