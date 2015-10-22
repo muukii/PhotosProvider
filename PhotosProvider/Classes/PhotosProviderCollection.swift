@@ -43,6 +43,11 @@ public class PhotosProviderCollection: Hashable {
         self.sourceCollection = sourceCollection
     }
     
+    public func cancelRequestGroup() {
+        
+        self.currentReuqestGroupOperation?.cancel()
+    }
+        
     public func requestGroup(completion: (group: PhotosProviderAssetsGroup) -> Void) {
         
         if let group = self.group {
@@ -52,8 +57,7 @@ public class PhotosProviderCollection: Hashable {
         
         if #available(iOS 8.0, *) {
             
-            GCDBlock.async(.Default) {
-                
+            let operation = NSBlockOperation {
                 guard let collection = self.sourceCollection as? PHAssetCollection else {
                     assert(false, "sourceCollection is not PHAssetCollection")
                 }
@@ -68,6 +72,10 @@ public class PhotosProviderCollection: Hashable {
                     completion(group: _assets)
                 }
             }
+           
+            self.currentReuqestGroupOperation = operation
+            PhotosProviderCollection.operationQueue.addOperation(operation)
+            
         } else {
             
         }
@@ -98,4 +106,12 @@ public class PhotosProviderCollection: Hashable {
         
         return ObjectIdentifier(self).hashValue
     }
+    
+    private var currentReuqestGroupOperation: NSOperation?
+    
+    private static let operationQueue: NSOperationQueue = {
+        let queue = NSOperationQueue()
+        queue.maxConcurrentOperationCount = 10
+        return queue
+    }()
 }
