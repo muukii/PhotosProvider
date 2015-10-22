@@ -80,10 +80,12 @@ public class PhotosProviderCollection: Hashable {
             return
         }
         
-        self.group?.requestAssetsGroupByDays { _groupByDay in
-            
-            self.groupByDay = _groupByDay
-            completion(groupByDay: _groupByDay)
+        self.requestGroup { [weak self] group in
+            group.requestAssetsGroupByDays { _groupByDay in
+                
+                self?.groupByDay = _groupByDay
+                completion(groupByDay: _groupByDay)
+            }
         }
     }
     
