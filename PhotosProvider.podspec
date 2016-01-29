@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.description  = "You can use Photos Framework easily"
 
-  s.homepage     = "http://github.com/muukii0803/PhotosProvider"
+  s.homepage     = "http://github.com/muukii/PhotosProvider"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -72,7 +72,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/muukii0803/PhotosProvider.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/muukii/PhotosProvider.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―
