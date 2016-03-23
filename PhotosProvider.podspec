@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "PhotosProvider"
-  s.version      = "0.0.3"
+  s.version      = "0.1.0"
   s.summary      = "Use combined PhotoObjects."
 
   s.description  = "You can use Photos Framework easily"
@@ -125,6 +125,6 @@ Pod::Spec.new do |s|
   # s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency "GCDKit", "1.1.7"
+  s.dependency "GCDKit", "~> 1.2.1"
 
 end
