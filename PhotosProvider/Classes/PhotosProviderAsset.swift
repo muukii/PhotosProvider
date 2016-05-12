@@ -11,7 +11,7 @@ import Photos
 import AssetsLibrary
 import CoreLocation
 
-func == (lhs: PhotosProviderAsset, rhs: PhotosProviderAsset) -> Bool {
+public func == (lhs: PhotosProviderAsset, rhs: PhotosProviderAsset) -> Bool {
     
     return lhs.localIdentifier == rhs.localIdentifier
 }

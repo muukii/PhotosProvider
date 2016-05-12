@@ -15,7 +15,7 @@ public class PhotosProviderAssetsGroupByDay {
         public var day: NSDate
         public var assets: [PhotosProviderAsset]
         
-        var numberOfAssets: Int {
+        public var numberOfAssets: Int {
             return self.assets.count            
         }
         
