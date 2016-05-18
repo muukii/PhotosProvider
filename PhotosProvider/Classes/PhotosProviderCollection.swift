@@ -47,9 +47,9 @@ public class PhotosProviderCollection: Hashable {
         self.currentReuqestGroupOperation?.cancel()
     }
         
-    public func requestGroup(completion: (group: PhotosProviderAssetsGroup) -> Void) {
+    public func requestGroup(refetch refetch: Bool = false, completion: (group: PhotosProviderAssetsGroup) -> Void) {
         
-        if let group = self.group {
+        if let group = self.group where refetch == false {
             completion(group: group)
             return
         }
@@ -75,14 +75,14 @@ public class PhotosProviderCollection: Hashable {
         PhotosProviderCollection.operationQueue.addOperation(operation)
     }
     
-    public func requestGroupByDay(completion: (groupByDay: PhotosProviderAssetsGroupByDay) -> Void) {
+    public func requestGroupByDay(refetch refetch: Bool = false, completion: (groupByDay: PhotosProviderAssetsGroupByDay) -> Void) {
         
-        if let groupByDay = self.groupByDay {
+        if let groupByDay = self.groupByDay where refetch == false {
             completion(groupByDay: groupByDay)
             return
         }
         
-        self.requestGroup { [weak self] group in
+        self.requestGroup(refetch: refetch) { [weak self] group in
             group.requestAssetsGroupByDays { _groupByDay in
                 
                 self?.groupByDay = _groupByDay
