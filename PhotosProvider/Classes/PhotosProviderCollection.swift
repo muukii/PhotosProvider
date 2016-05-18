@@ -35,7 +35,6 @@ public class PhotosProviderCollection: Hashable {
         }
     }
     
-    @available(iOS 8.0, *)
     public init(title: String, sourceCollection: PHAssetCollection, configuration: PhotosProviderConfiguration, buildGroupByDay: Bool = false) {
         
         self.title = title
@@ -55,31 +54,25 @@ public class PhotosProviderCollection: Hashable {
             return
         }
         
-        if #available(iOS 8.0, *) {
-            
-            let operation = NSBlockOperation {
-                guard let collection = self.sourceCollection as? PHAssetCollection else {
-                    assert(false, "sourceCollection is not PHAssetCollection")
-                    return
-                }
-                let fetchOptions = self.configuration.fetchPhotosOptions()
-                fetchOptions.sortDescriptors = [
-                    NSSortDescriptor(key: "creationDate", ascending: false),
-                ]
-                let _assets = PHAsset.fetchAssetsInAssetCollection(collection, options: fetchOptions)
-                self.group = _assets
-                
-                GCDBlock.async(.Main) {
-                    completion(group: _assets)
-                }
+        let operation = NSBlockOperation {
+            guard let collection = self.sourceCollection as? PHAssetCollection else {
+                assert(false, "sourceCollection is not PHAssetCollection")
+                return
             }
-           
-            self.currentReuqestGroupOperation = operation
-            PhotosProviderCollection.operationQueue.addOperation(operation)
+            let fetchOptions = self.configuration.fetchPhotosOptions()
+            fetchOptions.sortDescriptors = [
+                NSSortDescriptor(key: "creationDate", ascending: false),
+            ]
+            let _assets = PHAsset.fetchAssetsInAssetCollection(collection, options: fetchOptions)
+            self.group = _assets
             
-        } else {
-            
+            GCDBlock.async(.Main) {
+                completion(group: _assets)
+            }
         }
+        
+        self.currentReuqestGroupOperation = operation
+        PhotosProviderCollection.operationQueue.addOperation(operation)
     }
     
     public func requestGroupByDay(completion: (groupByDay: PhotosProviderAssetsGroupByDay) -> Void) {

@@ -8,7 +8,6 @@
 
 import Foundation
 import Photos
-import AssetsLibrary
 import CoreLocation
 
 #if !PHOTOSPROVIDER_EXCLUDE_IMPORT_MODULES
@@ -78,7 +77,6 @@ public class CustomAssetsGroup: PhotosProviderAssetsGroup {
     }
 }
 
-@available(iOS 8.0, *)
 extension PHFetchResult: PhotosProviderAssetsGroup {
     
     public func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?) {
@@ -124,81 +122,6 @@ extension PHFetchResult: PhotosProviderAssetsGroup {
     public var last: PhotosProviderAsset? {
         
         return self.lastObject as? PhotosProviderAsset
-    }
-}
-
-extension ALAssetsGroup: PhotosProviderAssetsGroup {
-    
-    public func requestAssetsGroupByDays(result: ((assetsGroupByDay: PhotosProviderAssetsGroupByDay) -> Void)?) {
-        
-        GCDBlock.async(.Default) {
-            
-            let dividedAssets = divideByDay(dateSortedAssets: self)
-            
-            GCDBlock.async(.Main) {
-                result?(assetsGroupByDay: dividedAssets)
-            }
-        }
-    }
-    
-    public func enumerateAssetsUsingBlock(block: ((asset: PhotosProviderAsset) -> Void)?) {
-
-        self.enumerateAssetsUsingBlock { (asset, index, stop) -> Void in
-            
-            block?(asset: asset)
-        }
-    }
-    
-    public var count: Int {
-        
-        return self.count
-    }
-    
-    public subscript (index: Int) -> PhotosProviderAsset? {
-        
-        return self.assets?[index]
-    }
-    
-    var assets: [ALAsset]? {
-        
-        get {
-            
-            if let value = objc_getAssociatedObject(self, &StoredProperties.assets)  as? [ALAsset] {
-                return value
-            }
-            
-            var assets: [ALAsset] = []
-            
-            self.enumerateAssetsUsingBlock { (asset, index, stop) -> Void in
-                
-                assets.append(asset)
-            }
-            self.assets = assets
-            return assets
-        }
-        set {
-            
-            objc_setAssociatedObject(
-                self,
-                &StoredProperties.assets,
-                newValue,
-                .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
-    
-    private struct StoredProperties {
-        
-        static var assets: Void?
-    }
-    
-    public var first: PhotosProviderAsset? {
-        
-        return self.assets?.first
-    }
-    
-    public var last: PhotosProviderAsset? {
-        
-        return self.assets?.last
     }
 }
 

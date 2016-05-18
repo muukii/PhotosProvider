@@ -11,21 +11,12 @@ import Photos
 
 public protocol PhotosProviderConfiguration {
     
-    // MARK: iOS8 Photos.framework
-    @available(iOS 8.0, *)
     func fetchAlbums() -> [PHAssetCollection]
-    
-    @available(iOS 8.0, *)
     func fetchPhotosOptions() -> PHFetchOptions
-    
-    // MARK: iOS7 AssetsLibrary.framework
-    
-    // TODO:
 }
 
 public extension PhotosProviderConfiguration {
     
-    @available(iOS 8.0, *)
     func fetchAlbums() -> [PHAssetCollection] {
         
         var albumCollections: [PHAssetCollection] = []
@@ -72,7 +63,6 @@ public extension PhotosProviderConfiguration {
         return [userLibraryCollection] + smartCollections + topLevelCollections + albumCollections
     }
     
-    @available(iOS 8.0, *)
     func fetchPhotosOptions() -> PHFetchOptions {
         
         return PHFetchOptions()
