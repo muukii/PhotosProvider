@@ -25,7 +25,7 @@ public enum PhotosProviderAuthorizationStatus : Int {
 
 public class PhotosProvider {
     
-    public var libraryDidChanged: (() -> Void)?
+    public var libraryDidChanged: (([PhotosProviderCollection]) -> Void)?
     
     public let configuration: PhotosProviderConfiguration
     
@@ -59,10 +59,10 @@ public class PhotosProvider {
             let buildGroupdByDay = strongSelf.cachedBuildGroupByDay ?? false
             
             strongSelf.cachedFetchedAlbums = nil
-            strongSelf.fetchAlbums(buildGroupByDay: buildGroupdByDay) { _ in
+            strongSelf.fetchAlbums(buildGroupByDay: buildGroupdByDay) { collections in
                 
                 GCDBlock.async(.Main) {
-                    self?.libraryDidChanged?()
+                    self?.libraryDidChanged?(collections)
                 }
             }
         }
