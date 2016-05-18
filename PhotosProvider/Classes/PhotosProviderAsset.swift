@@ -8,7 +8,6 @@
 
 import Foundation
 import Photos
-import AssetsLibrary
 import CoreLocation
 
 public func == (lhs: PhotosProviderAsset, rhs: PhotosProviderAsset) -> Bool {
@@ -58,7 +57,6 @@ public enum AssetMediaType: Int {
     case Audio
 }
 
-@available(iOS 8.0, *)
 extension PHAsset: PhotosProviderAsset {
     
     public var favoriteAsset: Bool {
@@ -232,126 +230,5 @@ extension PHAsset: PhotosProviderAsset {
         static var originalImageDownloadProgress: Void?
         static var imageRequestID: Void?
         static var originalImageRequestID: Void?
-    }
-}
-
-extension ALAsset: PhotosProviderAsset {
-    
-    public var localIdentifier: String {
-        
-        return self.valueForProperty(ALAssetPropertyAssetURL) as! String
-    }
-    
-    public var assetMediaType: AssetMediaType {
-        
-        // TODO:
-        return .Unknown
-    }
-    
-    public var pixelWidth: Int {
-        
-        return Int(self.defaultRepresentation().dimensions().width)
-    }
-    public var pixelHeight: Int {
-        
-        return Int(self.defaultRepresentation().dimensions().height)
-    }
-    
-    public var creationDate: NSDate? {
-        
-        return self.valueForProperty(ALAssetPropertyDate) as? NSDate
-    }
-    
-    public var modificationDate: NSDate? {
-        
-        return self.valueForProperty(ALAssetPropertyDate) as? NSDate
-    }
-    
-    public var location: CLLocation? {
-        
-        return self.valueForProperty(ALAssetPropertyLocation) as? CLLocation
-    }
-    
-    public var duration: NSTimeInterval {
-        
-        return (self.valueForProperty(ALAssetPropertyDuration) as! NSNumber).doubleValue
-    }
-    
-    public var hidden: Bool {
-        
-        // TODO:
-        return false
-    }
-    
-    public var favoriteAsset: Bool {
-        
-        // TODO:
-        return false
-    }
-    
-    public func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?) {
-        
-
-    }
-        
-    public func requestImage(
-        targetSize targetSize: CGSize,
-        progress: NSProgress? -> Void,
-        option: PhotosProviderAssetOption?,
-        completion: (PhotosProviderAsset, PhotosProviderAssetResult) -> Void) {
-            
-            let cgimage = self.defaultRepresentation().fullScreenImage()
-            
-            guard let _cgimage = cgimage else {
-                completion(self, .Failure(PhotosProviderAssetResultErrorType.Unknown))
-                return
-            }
-            let image = UIImage(CGImage: _cgimage.takeUnretainedValue())
-            completion(self, .Success(image))
-    }
-    
-    public func requestOriginalImage(
-        progress progress: NSProgress? -> Void,
-        option: PhotosProviderAssetOption?,
-        completion: (PhotosProviderAsset, PhotosProviderAssetResult) -> Void) {
-            
-            let cgimage = self.defaultRepresentation().fullScreenImage()
-            
-            guard let _cgimage = cgimage else {
-                completion(self, .Failure(PhotosProviderAssetResultErrorType.Unknown))
-                return
-            }
-            let image = UIImage(CGImage: _cgimage.takeUnretainedValue())
-            completion(self, .Success(image))
-    }
-    
-    public dynamic var originalImageDownloadProgress: NSProgress? {
-        
-        get {
-            
-            let value = objc_getAssociatedObject(self, &StoredProperties.originalImageDownloadProgress) as? NSProgress
-            return value
-        }
-        set {
-            
-            objc_setAssociatedObject(
-                self,
-                &StoredProperties.originalImageDownloadProgress,
-                newValue,
-                objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    public func cancelRequestImage() {
-        
-    }
-    
-    public func cancelRequestOriginalImage() {
-        
-    }
-    
-    private struct StoredProperties {
-        
-        static var originalImageDownloadProgress: Void?
     }
 }

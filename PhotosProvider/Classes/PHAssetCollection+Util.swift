@@ -9,7 +9,6 @@
 import Foundation
 import Photos
 
-@available(iOS 8.0, *)
 extension PHAssetCollection {
     
     func requestNumberOfAssets() -> Int {
