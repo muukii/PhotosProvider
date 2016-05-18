@@ -8,7 +8,6 @@
 
 import Foundation
 import Photos
-import AssetsLibrary
 
 #if !PHOTOSPROVIDER_EXCLUDE_IMPORT_MODULES
     import GCDKit
@@ -32,30 +31,18 @@ public class PhotosProvider {
     
     public static var authorizationStatus: PhotosProviderAuthorizationStatus {
         
-        if #available(iOS 8.0, *) {
-            
-            return PhotosProviderAuthorizationStatus(rawValue: PHPhotoLibrary.authorizationStatus().rawValue)!
-        } else {
-            
-            return PhotosProviderAuthorizationStatus(rawValue: ALAssetsLibrary.authorizationStatus().rawValue)!
-        }
+        return PhotosProviderAuthorizationStatus(rawValue: PHPhotoLibrary.authorizationStatus().rawValue)!
     }
     
     public static func requestAuthorization(handler: ((PhotosProviderAuthorizationStatus) -> Void)?) {
         
-        if #available(iOS 8.0, *) {
+        PHPhotoLibrary.requestAuthorization({ (status) -> Void in
+            let status = PhotosProviderAuthorizationStatus(rawValue: status.rawValue)!
             
-            PHPhotoLibrary.requestAuthorization({ (status) -> Void in
-                let status = PhotosProviderAuthorizationStatus(rawValue: status.rawValue)!
-                
-                GCDBlock.async(.Main) {
-                    handler?(status)
-                }
-            })
-        } else {
-            
-            // TODO:
-        }
+            GCDBlock.async(.Main) {
+                handler?(status)
+            }
+        })
     }
     
     public init(configuration: PhotosProviderConfiguration) {
@@ -63,28 +50,20 @@ public class PhotosProvider {
         self.configuration = configuration
         self.monitor.startObserving()
         
-        if #available(iOS 8.0, *) {
+        self.monitor.photosDidChange = { [weak self] change in
             
-            self.monitor.photosDidChange = { [weak self] change in
-                
-                guard let strongSelf = self else {
-                    return
-                }
-                
-                let buildGroupdByDay = strongSelf.cachedBuildGroupByDay ?? false
-                
-                strongSelf.cachedFetchedAlbums = nil
-                self?.fetchAlbums(buildGroupByDay: buildGroupdByDay) { _ in
-                    
-                    GCDBlock.async(.Main) {
-                        self?.libraryDidChanged?()
-                    }
-                }
+            guard let strongSelf = self else {
+                return
             }
-        } else {
             
-            self.monitor.assetsLibraryDidChange = { notification in
+            let buildGroupdByDay = strongSelf.cachedBuildGroupByDay ?? false
+            
+            strongSelf.cachedFetchedAlbums = nil
+            strongSelf.fetchAlbums(buildGroupByDay: buildGroupdByDay) { _ in
                 
+                GCDBlock.async(.Main) {
+                    self?.libraryDidChanged?()
+                }
             }
         }
     }
@@ -111,38 +90,28 @@ public class PhotosProvider {
             return
         }
         
-        if #available(iOS 8.0, *) {
-            // Use Photos.framework
+        GCDBlock.async(queue) {
             
-            GCDBlock.async(queue) {
-                
-                let options = self.configuration.fetchPhotosOptions()
-                options.sortDescriptors = [
-                    NSSortDescriptor(key: "creationDate", ascending: false),
-                ]
-                
-                guard let userLibrary = PHAssetCollection.fetchAssetCollectionsWithType(
-                    PHAssetCollectionType.SmartAlbum,
-                    subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary,
-                    options: nil).firstObject as? PHAssetCollection else {
-                        return
-                }
-                
-                let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
-                
-                let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: fetchResult, configuration: self.configuration)
-                
-                GCDBlock.async(.Main) {
-                    
-                    result(collection)
-                }
+            let options = self.configuration.fetchPhotosOptions()
+            options.sortDescriptors = [
+                NSSortDescriptor(key: "creationDate", ascending: false),
+            ]
+            
+            guard let userLibrary = PHAssetCollection.fetchAssetCollectionsWithType(
+                PHAssetCollectionType.SmartAlbum,
+                subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary,
+                options: nil).firstObject as? PHAssetCollection else {
+                    return
             }
             
+            let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
             
-        } else {
-            // Use AssetsLibrary.framework
+            let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: fetchResult, configuration: self.configuration)
             
-            fatalError("Sorry, Not yet supported...")
+            GCDBlock.async(.Main) {
+                
+                result(collection)
+            }
         }
     }
     
@@ -158,32 +127,22 @@ public class PhotosProvider {
             return
         }
         
-        if #available(iOS 8.0, *) {
+        GCDBlock.async(queue) {
             
-            // Using Photos Framework
-            GCDBlock.async(queue) {
+            let collections = self.configuration.fetchAlbums()
+            
+            let albums: [PhotosProviderCollection] = collections.map { collection in
                 
-                let collections = self.configuration.fetchAlbums()
-                
-                let albums: [PhotosProviderCollection] = collections.map { collection in
-                    
-                    let title = collection.localizedTitle ?? ""
-                    return PhotosProviderCollection(title: title, sourceCollection: collection, configuration: self.configuration)
-                }
-                
-                self.cachedFetchedAlbums = albums
-                self.cachedBuildGroupByDay = buildGroupByDay
-                
-                GCDBlock.async(.Main) {
-                    result(albums)
-                }
+                let title = collection.localizedTitle ?? ""
+                return PhotosProviderCollection(title: title, sourceCollection: collection, configuration: self.configuration)
             }
             
-        } else {
+            self.cachedFetchedAlbums = albums
+            self.cachedBuildGroupByDay = buildGroupByDay
             
-            // Using AssetsLibrary Framework
-            
-            // TODO:
+            GCDBlock.async(.Main) {
+                result(albums)
+            }
         }
     }
     
