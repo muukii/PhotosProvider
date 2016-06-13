@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "PhotosProvider"
-  s.version      = "0.2.0"
+  s.version      = "0.3.0"
   s.summary      = "Use combined PhotoObjects."
   s.description  = "You can use Photos Framework easily"
 
@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   s.source_files  = "PhotosProvider/Classes/**/*.swift"
   s.exclude_files = "Classes/Exclude"
   s.frameworks  = "Foundation", "GCDKit"
-  s.dependency "GCDKit", "~> 1.2.1"
+  s.dependency "GCDKit", "~> 1.2"
 
 end
