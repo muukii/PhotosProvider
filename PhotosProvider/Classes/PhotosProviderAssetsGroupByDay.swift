@@ -8,47 +8,47 @@
 
 import Foundation
 
-public class PhotosProviderAssetsGroupByDay {
+open class PhotosProviderAssetsGroupByDay {
     
-    public class DayAssets {
+    open class DayAssets {
         
-        public var day: NSDate
-        public var assets: [PhotosProviderAsset]
+        open var day: Date
+        open var assets: [PhotosProviderAsset]
         
-        public var numberOfAssets: Int {
-            return self.assets.count            
+        open var numberOfAssets: Int {
+            return assets.count
         }
         
-        public init(day: NSDate, assets: [PhotosProviderAsset] = []) {
+        public init(day: Date, assets: [PhotosProviderAsset] = []) {
             
             self.day = day
             self.assets = assets
         }
     }
     
-    public var dayAssets = [DayAssets]()
+    open var dayAssets = [DayAssets]()
     
-    public var numberOfDays: Int {
+    open var numberOfDays: Int {
         
         return dayAssets.count
     }
     
-    public subscript (date date: NSDate) -> [PhotosProviderAsset] {
+    open subscript (date date: Date) -> [PhotosProviderAsset] {
 
-        return self.dayAssets.filter { $0.day == date }.first?.assets ?? []
+        return dayAssets.filter { $0.day == date }.first?.assets ?? []
     }
     
-    public subscript (index: Int) -> DayAssets? {
+    open subscript (index: Int) -> DayAssets? {
         
-        guard self.dayAssets.count > index else {
+        guard dayAssets.count > index else {
             
             return nil
         }
         
-        return self.dayAssets[index]
+        return dayAssets[index]
     }
     
-    public func allDayAssets() -> [PhotosProviderAsset] {
+    open func allDayAssets() -> [PhotosProviderAsset] {
         
         return dayAssets.reduce([PhotosProviderAsset]()) { $0 + $1.assets }
     }

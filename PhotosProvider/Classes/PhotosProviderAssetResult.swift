@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-public enum PhotosProviderAssetResultErrorType: ErrorType {
-    case Unknown
+public enum PhotosProviderAssetResultErrorType: Error {
+    case unknown
 }
 
 public enum PhotosProviderAssetResult {
-    case Success(UIImage)
-    case Failure(ErrorType)
+    case success(UIImage)
+    case failure(Error)
 }

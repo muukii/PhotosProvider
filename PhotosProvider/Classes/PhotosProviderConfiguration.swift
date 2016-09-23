@@ -21,43 +21,40 @@ public extension PhotosProviderConfiguration {
         
         var albumCollections: [PHAssetCollection] = []
         do {
-            let albumsResult = PHAssetCollection.fetchAssetCollectionsWithType(
-                PHAssetCollectionType.Album,
-                subtype: PHAssetCollectionSubtype.Any,
+            let albumsResult = PHAssetCollection.fetchAssetCollections(
+                with: PHAssetCollectionType.album,
+                subtype: PHAssetCollectionSubtype.any,
                 options: nil)
             
-            
-            albumsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            albumsResult.enumerateObjects({ (collection, index, stop) -> Void in
                 
-                if let collection = collection as? PHAssetCollection {
-                    albumCollections.insert(collection, atIndex: 0)
-                }
-            }
+                albumCollections.insert(collection, at: 0)
+            })
         }
         
         var topLevelCollections: [PHAssetCollection] = []
         do {
-            let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+            let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollections(with: nil)
             
-            topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            topLevelUserCollectionsResult.enumerateObjects({ (collection, index, stop) -> Void in
                 
                 if let collection = collection as? PHAssetCollection {
                     topLevelCollections.append(collection)
                 }
-            }
+            })
         }
-        let userLibraryCollection: PHAssetCollection = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary, options: nil).firstObject as! PHAssetCollection
+        let userLibraryCollection: PHAssetCollection = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.smartAlbum, subtype: PHAssetCollectionSubtype.smartAlbumUserLibrary, options: nil).firstObject!
         
         var smartCollections: [PHAssetCollection] = []
         do {
-            let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
+            let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.smartAlbum, subtype: PHAssetCollectionSubtype.any, options: nil)
             
-            smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            smartAlbumsCollectionResult.enumerateObjects({ (collection, index, stop) -> Void in
                 
-                if let collection = collection as? PHAssetCollection where collection != userLibraryCollection {
+                if collection != userLibraryCollection {
                     smartCollections.append(collection)
                 }
-            }
+            })
         }
         
         return [userLibraryCollection] + smartCollections + topLevelCollections + albumCollections

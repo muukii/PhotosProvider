@@ -11,20 +11,20 @@ import Photos
 
 class PhotosProviderMonitor {
     
-    var photosDidChange: ((PhotosProviderChange) -> Void)?
+    var photosDidChange: ((PHChange) -> Void)?
     
     private(set) var isObserving: Bool = false
     
     func startObserving() {
         
-        self.isObserving = true
-        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self.photosLibraryObserver)
+        isObserving = true
+        PHPhotoLibrary.shared().register(self.photosLibraryObserver)
     }
     
     func endObserving() {
         
-        self.isObserving = false
-        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self.photosLibraryObserver)
+        isObserving = false
+        PHPhotoLibrary.shared().unregisterChangeObserver(self.photosLibraryObserver)
     }
     
     private lazy var photosLibraryObserver: PhotosLibraryObserver = { [weak self] in
@@ -37,13 +37,10 @@ class PhotosProviderMonitor {
     }()
 }
 
-protocol PhotosProviderChange {}
-extension PHChange: PhotosProviderChange {}
-
-private class PhotosLibraryObserver: NSObject, PHPhotoLibraryChangeObserver {
+fileprivate class PhotosLibraryObserver: NSObject, PHPhotoLibraryChangeObserver {
     
     var didChange: ((PHChange) -> Void)?
-    @objc private func photoLibraryDidChange(changeInstance: PHChange) {
+    @objc fileprivate func photoLibraryDidChange(_ changeInstance: PHChange) {
         
         didChange?(changeInstance)
     }

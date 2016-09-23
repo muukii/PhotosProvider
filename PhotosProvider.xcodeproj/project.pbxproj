@@ -8,17 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		4B364FE71B73CAE600ED6209 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B364FE61B73CAE600ED6209 /* Photos.framework */; };
-		4B7208291BA2A0E000FF6E58 /* GCDKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7208261BA2A0D700FF6E58 /* GCDKit.framework */; };
-		4B88F4931BB460AE006148E3 /* PHAssetCollection+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F4891BB460AE006148E3 /* PHAssetCollection+Util.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F4941BB460AE006148E3 /* PhotosProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48A1BB460AE006148E3 /* PhotosProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F4951BB460AE006148E3 /* PhotosProviderAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48B1BB460AE006148E3 /* PhotosProviderAsset.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F4961BB460AE006148E3 /* PhotosProviderAssetOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48C1BB460AE006148E3 /* PhotosProviderAssetOption.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F4971BB460AE006148E3 /* PhotosProviderAssetResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48D1BB460AE006148E3 /* PhotosProviderAssetResult.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F4981BB460AE006148E3 /* PhotosProviderAssetsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48E1BB460AE006148E3 /* PhotosProviderAssetsGroup.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F4991BB460AE006148E3 /* PhotosProviderAssetsGroupByDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48F1BB460AE006148E3 /* PhotosProviderAssetsGroupByDay.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F49A1BB460AE006148E3 /* PhotosProviderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F4901BB460AE006148E3 /* PhotosProviderCollection.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F49B1BB460AE006148E3 /* PhotosProviderConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F4911BB460AE006148E3 /* PhotosProviderConfiguration.swift */; settings = {ASSET_TAGS = (); }; };
-		4B88F49C1BB460AE006148E3 /* PhotosProviderMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F4921BB460AE006148E3 /* PhotosProviderMonitor.swift */; settings = {ASSET_TAGS = (); }; };
+		4B88F4931BB460AE006148E3 /* PHAssetCollection+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F4891BB460AE006148E3 /* PHAssetCollection+Util.swift */; };
+		4B88F4941BB460AE006148E3 /* PhotosProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48A1BB460AE006148E3 /* PhotosProvider.swift */; };
+		4B88F4951BB460AE006148E3 /* PhotosProviderAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48B1BB460AE006148E3 /* PhotosProviderAsset.swift */; };
+		4B88F4961BB460AE006148E3 /* PhotosProviderAssetOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48C1BB460AE006148E3 /* PhotosProviderAssetOption.swift */; };
+		4B88F4971BB460AE006148E3 /* PhotosProviderAssetResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48D1BB460AE006148E3 /* PhotosProviderAssetResult.swift */; };
+		4B88F4981BB460AE006148E3 /* PhotosProviderAssetsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48E1BB460AE006148E3 /* PhotosProviderAssetsGroup.swift */; };
+		4B88F4991BB460AE006148E3 /* PhotosProviderAssetsGroupByDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F48F1BB460AE006148E3 /* PhotosProviderAssetsGroupByDay.swift */; };
+		4B88F49A1BB460AE006148E3 /* PhotosProviderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F4901BB460AE006148E3 /* PhotosProviderCollection.swift */; };
+		4B88F49B1BB460AE006148E3 /* PhotosProviderConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F4911BB460AE006148E3 /* PhotosProviderConfiguration.swift */; };
+		4B88F49C1BB460AE006148E3 /* PhotosProviderMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B88F4921BB460AE006148E3 /* PhotosProviderMonitor.swift */; };
 		4BD208541B736B430006925F /* PhotosProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD208531B736B430006925F /* PhotosProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BD2085B1B736B430006925F /* PhotosProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD208501B736B430006925F /* PhotosProvider.framework */; };
 		4BD208601B736B430006925F /* PhotosProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD2085F1B736B430006925F /* PhotosProviderTests.swift */; };
@@ -35,20 +34,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4B7208251BA2A0D700FF6E58 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4B7208201BA2A0D700FF6E58 /* GCDKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2FBBCACB19A9FE610070E4AB;
-			remoteInfo = GCDKit;
-		};
-		4B7208271BA2A0D700FF6E58 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4B7208201BA2A0D700FF6E58 /* GCDKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2FBBCAD619A9FE610070E4AB;
-			remoteInfo = GCDKitTests;
-		};
 		4BD2085C1B736B430006925F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4BD208471B736B430006925F /* Project object */;
@@ -62,13 +47,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4BD2084F1B736B430006925F;
 			remoteInfo = PhotosProvider;
-		};
-		4BFC7E241BA871A10019DA8E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4B7208201BA2A0D700FF6E58 /* GCDKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FBBCACA19A9FE610070E4AB;
-			remoteInfo = GCDKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -88,7 +66,6 @@
 
 /* Begin PBXFileReference section */
 		4B364FE61B73CAE600ED6209 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
-		4B7208201BA2A0D700FF6E58 /* GCDKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GCDKit.xcodeproj; path = GCDKit/GCDKit.xcodeproj; sourceTree = "<group>"; };
 		4B88F4891BB460AE006148E3 /* PHAssetCollection+Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PHAssetCollection+Util.swift"; sourceTree = "<group>"; };
 		4B88F48A1BB460AE006148E3 /* PhotosProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosProvider.swift; sourceTree = "<group>"; };
 		4B88F48B1BB460AE006148E3 /* PhotosProviderAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosProviderAsset.swift; sourceTree = "<group>"; };
@@ -122,7 +99,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B7208291BA2A0E000FF6E58 /* GCDKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,23 +122,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4B7208061BA2A0C800FF6E58 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				4B7208201BA2A0D700FF6E58 /* GCDKit.xcodeproj */,
-			);
-			path = Frameworks;
-			sourceTree = "<group>";
-		};
-		4B7208211BA2A0D700FF6E58 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4B7208261BA2A0D700FF6E58 /* GCDKit.framework */,
-				4B7208281BA2A0D700FF6E58 /* GCDKitTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		4B88F4881BB460AE006148E3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,7 +144,6 @@
 			children = (
 				4B364FE61B73CAE600ED6209 /* Photos.framework */,
 				4BD208521B736B430006925F /* PhotosProvider */,
-				4B7208061BA2A0C800FF6E58 /* Frameworks */,
 				4BD2085E1B736B430006925F /* PhotosProviderTests */,
 				4BF62D491B73BFFC0086E10C /* PhotosProviderDemo */,
 				4BD208511B736B430006925F /* Products */,
@@ -263,7 +221,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4BFC7E251BA871A10019DA8E /* PBXTargetDependency */,
 			);
 			name = PhotosProvider;
 			productName = PhotosProvider;
@@ -319,9 +276,11 @@
 				TargetAttributes = {
 					4BD2084F1B736B430006925F = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0800;
 					};
 					4BD208591B736B430006925F = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0800;
 					};
 					4BF62D471B73BFFC0086E10C = {
 						CreatedOnToolsVersion = 7.0;
@@ -339,12 +298,6 @@
 			mainGroup = 4BD208461B736B430006925F;
 			productRefGroup = 4BD208511B736B430006925F /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 4B7208211BA2A0D700FF6E58 /* Products */;
-					ProjectRef = 4B7208201BA2A0D700FF6E58 /* GCDKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				4BD2084F1B736B430006925F /* PhotosProvider */,
@@ -353,23 +306,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		4B7208261BA2A0D700FF6E58 /* GCDKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GCDKit.framework;
-			remoteRef = 4B7208251BA2A0D700FF6E58 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4B7208281BA2A0D700FF6E58 /* GCDKitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = GCDKitTests.xctest;
-			remoteRef = 4B7208271BA2A0D700FF6E58 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4BD2084E1B736B430006925F /* Resources */ = {
@@ -448,11 +384,6 @@
 			isa = PBXTargetDependency;
 			target = 4BD2084F1B736B430006925F /* PhotosProvider */;
 			targetProxy = 4BD816F51B74A12800DA5276 /* PBXContainerItemProxy */;
-		};
-		4BFC7E251BA871A10019DA8E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GCDKit;
-			targetProxy = 4BFC7E241BA871A10019DA8E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -582,6 +513,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -601,6 +533,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = me.muukii.PhotosProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -611,6 +544,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = me.muukii.PhotosProviderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -621,6 +555,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = me.muukii.PhotosProviderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

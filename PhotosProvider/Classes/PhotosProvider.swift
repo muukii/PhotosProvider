@@ -9,37 +9,34 @@
 import Foundation
 import Photos
 
-#if !PHOTOSPROVIDER_EXCLUDE_IMPORT_MODULES
-    import GCDKit
-#endif
-
 public enum PhotosProviderAuthorizationStatus : Int {
     
-    case NotDetermined // User has not yet made a choice with regards to this application
-    case Restricted // This application is not authorized to access photo data.
+    case notDetermined // User has not yet made a choice with regards to this application
+    case restricted // This application is not authorized to access photo data.
     // The user cannot change this application’s status, possibly due to active restrictions
     //   such as parental controls being in place.
-    case Denied // User has explicitly denied this application access to photos data.
-    case Authorized // User has authorized this application to access photos data.
+    case denied // User has explicitly denied this application access to photos data.
+    case authorized // User has authorized this application to access photos data.
 }
 
-public class PhotosProvider {
+open class PhotosProvider {
     
-    public var libraryDidChanged: (([PhotosProviderCollection]) -> Void)?
+    open var libraryDidChanged: (([PhotosProviderCollection]) -> Void)?
     
-    public let configuration: PhotosProviderConfiguration
+    open let configuration: PhotosProviderConfiguration
     
     public static var authorizationStatus: PhotosProviderAuthorizationStatus {
         
         return PhotosProviderAuthorizationStatus(rawValue: PHPhotoLibrary.authorizationStatus().rawValue)!
     }
     
-    public static func requestAuthorization(handler: ((PhotosProviderAuthorizationStatus) -> Void)?) {
+    public static func requestAuthorization(_ handler: ((PhotosProviderAuthorizationStatus) -> Void)?) {
         
         PHPhotoLibrary.requestAuthorization({ (status) -> Void in
             let status = PhotosProviderAuthorizationStatus(rawValue: status.rawValue)!
             
-            GCDBlock.async(.Main) {
+            DispatchQueue.main.async {
+                
                 handler?(status)
             }
         })
@@ -48,9 +45,9 @@ public class PhotosProvider {
     public init(configuration: PhotosProviderConfiguration) {
         
         self.configuration = configuration
-        self.monitor.startObserving()
+        monitor.startObserving()
         
-        self.monitor.photosDidChange = { [weak self] change in
+        monitor.photosDidChange = { [weak self] change in
             
             guard let strongSelf = self else {
                 return
@@ -61,16 +58,17 @@ public class PhotosProvider {
             strongSelf.cachedFetchedAlbums = nil
             strongSelf.fetchAlbums(buildGroupByDay: buildGroupdByDay) { collections in
                 
-                GCDBlock.async(.Main) {
+                DispatchQueue.main.async {
+                    
                     self?.libraryDidChanged?(collections)
                 }
             }
         }
     }
     
-    public func startPreheating() {
+    open func startPreheating() {
         
-        guard PhotosProvider.authorizationStatus == .Authorized else {
+        guard PhotosProvider.authorizationStatus == .authorized else {
             return
         }
 
@@ -80,54 +78,55 @@ public class PhotosProvider {
         }
     }
     
-    public func endPreheating() {
+    open func endPreheating() {
         
     }
     
-    public func fetchAllPhotos(result: (PhotosProviderCollection?) -> Void) {
+    open func fetchAllPhotos(_ result: @escaping (PhotosProviderCollection?) -> Void) {
         
-        guard PhotosProvider.authorizationStatus == .Authorized else {
+        guard PhotosProvider.authorizationStatus == .authorized else {
             return
         }
         
-        GCDBlock.async(queue) {
+        queue.async {
             
             let options = self.configuration.fetchPhotosOptions()
             options.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: false),
             ]
             
-            guard let userLibrary = PHAssetCollection.fetchAssetCollectionsWithType(
-                PHAssetCollectionType.SmartAlbum,
-                subtype: PHAssetCollectionSubtype.SmartAlbumUserLibrary,
-                options: nil).firstObject as? PHAssetCollection else {
+            guard let userLibrary = PHAssetCollection.fetchAssetCollections(
+                with: PHAssetCollectionType.smartAlbum,
+                subtype: PHAssetCollectionSubtype.smartAlbumUserLibrary,
+                options: nil).firstObject else {
+                    
                     return
             }
             
-            let fetchResult = PHAsset.fetchAssetsInAssetCollection(userLibrary, options: options)
+            let fetchResult = PHAsset.fetchAssets(in: userLibrary, options: options)
+                                    
+            let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: AssetGroup(fetchResult: fetchResult), configuration: self.configuration)
             
-            let collection = PhotosProviderCollection(title: userLibrary.localizedTitle ?? "", group: fetchResult, configuration: self.configuration)
-            
-            GCDBlock.async(.Main) {
+            DispatchQueue.main.async {
                 
                 result(collection)
             }
         }
     }
     
-    public func fetchAlbums(buildGroupByDay buildGroupByDay: Bool = false, result: [PhotosProviderCollection] -> Void) {
+    open func fetchAlbums(buildGroupByDay: Bool = false, result: @escaping ([PhotosProviderCollection]) -> Void) {
         
-        guard PhotosProvider.authorizationStatus == .Authorized else {
+        guard PhotosProvider.authorizationStatus == .authorized else {
             return
         }
         
-        if let fetchedAlbums = self.cachedFetchedAlbums {
+        if let fetchedAlbums = cachedFetchedAlbums {
             
             result(fetchedAlbums)
             return
         }
         
-        GCDBlock.async(queue) {
+        queue.async {
             
             let collections = self.configuration.fetchAlbums()
             
@@ -140,7 +139,8 @@ public class PhotosProvider {
             self.cachedFetchedAlbums = albums
             self.cachedBuildGroupByDay = buildGroupByDay
             
-            GCDBlock.async(.Main) {
+            DispatchQueue.main.async {
+                
                 result(albums)
             }
         }
@@ -153,6 +153,6 @@ public class PhotosProvider {
     private var cachedFetchedAlbums: [PhotosProviderCollection]?
     private var cachedBuildGroupByDay: Bool?
     
-    private let queue: GCDQueue = GCDQueue.createSerial("me.muukii.PhotosProvider.queue")
+    private let queue = DispatchQueue(label: "me.muukii.PhotosProvider.queue", qos: .default)
     private let monitor = PhotosProviderMonitor()
 }

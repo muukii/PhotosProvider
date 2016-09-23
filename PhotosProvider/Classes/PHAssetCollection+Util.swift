@@ -13,7 +13,7 @@ extension PHAssetCollection {
     
     func requestNumberOfAssets() -> Int {
         
-        let assets = PHAsset.fetchAssetsInAssetCollection(self, options: nil)
+        let assets = PHAsset.fetchAssets(in: self, options: nil)
         return assets.count
     }
 }
